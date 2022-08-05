@@ -91,8 +91,8 @@ struct rxbuf_t {
 
 
 void testComposeProtocolFrame();
-void ProtocolProcessing(uint8_t* inbuf, uint16_t len);//处理数据
-bool ProtocolLookUp(uint8_t* outBuf, uint8_t* inBuf, uint16_t inlen);//查找inBuf里是否有协议帧,有则将协议帧拷贝到outBuf
-void ComposeProtocolFrame(uint8_t* buf, uint16_t* dataLen, ProtocolItem_t* items);//组帧
+void ProtocolProcessing(uint8_t* buf, uint16_t len);//处理数据
+bool ProtocolLookUp(uint8_t* frameBuf, uint8_t* inBuf, uint16_t inLen);//查找inBuf里是否有协议帧,有则将协议帧拷贝到frameBuf
+void ComposeProtocolFrame(uint8_t* frameBuf, uint16_t* frameLen, ProtocolItem_t* items);//组帧协议帧拷贝到frameBuf
 
 #endif 

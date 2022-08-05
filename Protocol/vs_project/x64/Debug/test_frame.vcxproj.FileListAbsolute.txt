@@ -1,1 +1,2 @@
 E:\maker_community\ElectronBot-fw\Protocol\vs_project\x64\Debug\test_frame.exe
+E:\C_project\fw_test_frame\test_frame\ElectronBot-fw\Protocol\vs_project\x64\Debug\test_frame.exe

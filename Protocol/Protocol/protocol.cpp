@@ -35,16 +35,16 @@ uint8_t CheckSum(uint8_t* buf, uint16_t dataAreaLen)
 }
 
 
-void ComposeProtocolFrame(uint8_t* buf ,uint16_t *dataLen, ProtocolItem_t* items)
+void ComposeProtocolFrame(uint8_t* frameBuf, uint16_t* frameLen, ProtocolItem_t* items)
 {
     uint16_t len = 0, itemLen = 0;
     uint8_t checkValue = 0;
 
-    buf[0] = FrameHead;
+    frameBuf[0] = FrameHead;
     len++;
 
     itemLen = sizeof(items->ElectronBotID);
-    memcpy(&buf[len], &items->ElectronBotID, itemLen);
+    memcpy(&frameBuf[len], &items->ElectronBotID, itemLen);
     len += itemLen;
 
     if (items->frame == ResponseFrame)
@@ -52,49 +52,48 @@ void ComposeProtocolFrame(uint8_t* buf ,uint16_t *dataLen, ProtocolItem_t* items
         items->cmd = items->cmd | 0x80;
     }
     itemLen = sizeof(items->cmd);
-    memcpy(&buf[len], &items->cmd, itemLen);
+    memcpy(&frameBuf[len], &items->cmd, itemLen);
     len += itemLen;
 
     itemLen = sizeof(items->jointID);
-    memcpy(&buf[len], &items->jointID, itemLen);
+    memcpy(&frameBuf[len], &items->jointID, itemLen);
     len += itemLen;
 
     itemLen = sizeof(items->dataLen);
-    memcpy(&buf[len], &items->dataLen, itemLen);
+    memcpy(&frameBuf[len], &items->dataLen, itemLen);
     len += itemLen;
 
     //itemLen=sizeof(items->dataLen);
     if (items->dataLen > 0)
     {
-        memcpy(&buf[len], items->data, items->dataLen);
+        memcpy(&frameBuf[len], items->data, items->dataLen);
         len += items->dataLen;
     }
 
-    checkValue = CheckSum((uint8_t*)&txbuf.buf[0], len - 1);
-    buf[len] = checkValue;
+    checkValue = CheckSum(frameBuf, items->dataLen);
+    frameBuf[len] = checkValue;
     len++;
 
-    buf[len] = FrameTail;
+    frameBuf[len] = FrameTail;
     len++;
     
-    *dataLen = len;
-    // memcpy(txbuf,&items->ElectronBotID,sizeof(items->ElectronBotID));
+    *frameLen = len;
 }
 
 
 //查找inBuf里是否有协议帧,有则将协议帧拷贝到outBuf
-bool ProtocolLookUp(uint8_t* outBuf, uint8_t* inBuf, uint16_t inlen)
+bool ProtocolLookUp(uint8_t* frameBuf, uint8_t* inBuf, uint16_t inLen)
 {
     uint16_t i;
     uint16_t datalen = 0;
     uint8_t checkValue = 0;
-    if (inlen < 11)
+    if (inLen < 11)
     {
         return false;
     }
-    for (i = 0; i < inlen; i++)
+    for (i = 0; i < inLen; i++)
     {
-        if (inBuf[i] == FrameHead && inlen - i >= 11)
+        if (inBuf[i] == FrameHead && inLen - i >= 11)
         {
             datalen = inBuf[i + 7] + inBuf[i + 8] * 256;
             if (inBuf[i + 7 + 2 + datalen + 2 - 1] == FrameTail)
@@ -102,7 +101,7 @@ bool ProtocolLookUp(uint8_t* outBuf, uint8_t* inBuf, uint16_t inlen)
                 checkValue = inBuf[i + 7 + 2 + datalen + 1 - 1];
                 if (checkValue == CheckSum(&inBuf[i], datalen))
                 {
-                    memcpy(outBuf, &inBuf[i], 7 + 2 + datalen + 2);
+                    memcpy(frameBuf, &inBuf[i], 7 + 2 + datalen + 2);
                    // *outframeHead = i;
                     return true;
                     // ProtocolProcessing(rxbuf);
@@ -114,27 +113,23 @@ bool ProtocolLookUp(uint8_t* outBuf, uint8_t* inBuf, uint16_t inlen)
 }
 
 //此函数可以自己重新写
-void ProtocolProcessing(uint8_t* inbuf, uint16_t len)
+void ProtocolProcessing(uint8_t* buf, uint16_t len)
 {
+    uint8_t frameBuf[1024] = { 0 };
+    uint8_t idbuf = 0;
+    ElectronBotJointStatus_t* test;
 
-    BufClear((uint8_t*)&rxbuf, 0, sizeof(rxbuf));
-    if (ProtocolLookUp(rxbuf.buf, inbuf, len) == false)
+    if (ProtocolLookUp(frameBuf, buf, len) == false)
     {
         myprintf("\r\n  No Protocol!!!!!!! \r\n");
         return;
     }
 
-    ElectronBotJointStatus_t *test;
-
-    uint8_t idbuf = 0;
-    uint8_t* buf;
-
-    buf = rxbuf.buf;
-    ProtocolItem.ElectronBotID = buf[1] + buf[2] * 256 + buf[3] * 256 * 256 + buf[4] * 256 * 256 * 256;
-    ProtocolItem.cmd = buf[5];
-    ProtocolItem.jointID = buf[6];
-    ProtocolItem.dataLen = buf[7] + buf[8] * 256;
-    ProtocolItem.data = &buf[9];
+    ProtocolItem.ElectronBotID = frameBuf[1] + frameBuf[2] * 256 + frameBuf[3] * 256 * 256 + frameBuf[4] * 256 * 256 * 256;
+    ProtocolItem.cmd = frameBuf[5];
+    ProtocolItem.jointID = frameBuf[6];
+    ProtocolItem.dataLen = frameBuf[7] + frameBuf[8] * 256;
+    ProtocolItem.data = &frameBuf[9];
 
     myprintf("ElectronBotID=%d\r\n", ProtocolItem.ElectronBotID);
     myprintf("jointID=%d\r\n", ProtocolItem.jointID);
@@ -186,7 +181,6 @@ void testComposeProtocolFrame()
     test.kd = 3;
     test.enable = true;
 
-   // p = &test;
     memcpy((uint8_t*)testbuf, (uint8_t*)p, sizeof(ElectronBotJointStatus_t));
 
     ProtocolItem_t* p2;
@@ -201,8 +195,6 @@ void testComposeProtocolFrame()
     ProtocolItem.frame = CommandFrame; 
 
     ComposeProtocolFrame(txbuf.buf, &txbuf.dataLen ,&ProtocolItem);//组帧
-    //memcpy(&testbuf2[100], txbuf.buf, txbuf.dataLen);
-    //ProtocolProcessing(testbuf2, sizeof(testbuf2));//解帧
     ProtocolProcessing(txbuf.buf, txbuf.dataLen);//解帧
 
     BufClear((uint8_t*)&txbuf, 0, sizeof(txbuf));
