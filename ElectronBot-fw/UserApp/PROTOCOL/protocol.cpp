@@ -153,8 +153,8 @@ void ReadJointStatusFromFlash(uint8_t *buf ,uint16_t len)
     //STMFLASH_Write(FLASH_JointStatusData, (uint32_t *)buf,len);
     //STMFLASH_Read(uint32_t ReadAddr, uint32_t *pBuffer, uint32_t NumToRead);
     uint16_t address32Len=len/4;
-    if(address32Len%4!=0)address32Len++;
-    STMFLASH_Read(FLASH_JointStatusData,(uint32_t *)buf,len);
+    if(len%4!=0)address32Len++;
+    STMFLASH_Read(FLASH_JointStatusData,(uint32_t *)buf,address32Len);
 }
 
 
@@ -687,6 +687,9 @@ void JointStatusUpdata(void)
             flashSave.ElectronBotjoint[i].modelAngelMin = electron.joint[i].modelAngelMin;
 
             //flashSave.ElectronBotjoint[i].enable=electron.joint[i].enable;
+            flashSave.ElectronBotjoint[i].angle = electron.joint[i].angle;
+            flashSave.ElectronBotjoint[i].initAngle = 0;
+
             flashSave.ElectronBotjoint[i].inverted = electron.joint[i].inverted;
 
             flashSave.ElectronBotjoint[i].enable = false;
