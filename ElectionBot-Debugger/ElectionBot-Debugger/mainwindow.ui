@@ -747,7 +747,7 @@
       <rect>
        <x>0</x>
        <y>180</y>
-       <width>290</width>
+       <width>302</width>
        <height>78</height>
       </rect>
      </property>
@@ -1424,12 +1424,12 @@
      <rect>
       <x>490</x>
       <y>40</y>
-      <width>271</width>
+      <width>281</width>
       <height>81</height>
      </rect>
     </property>
     <property name="title">
-     <string>舵机往复转动测试（ 组装好了不要用这个测）</string>
+     <string>单个舵机往复转动测试（ 组装好了不要用这个测）</string>
     </property>
     <widget class="QDoubleSpinBox" name="rotationTestStartAngleDsb">
      <property name="geometry">
@@ -2123,19 +2123,6 @@
     </property>
     <property name="text">
      <string>清空所有窗口</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_recv_clear_4">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>420</y>
-      <width>41</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>清除</string>
     </property>
    </widget>
   </widget>

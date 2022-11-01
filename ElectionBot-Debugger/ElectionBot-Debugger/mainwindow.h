@@ -164,6 +164,7 @@ private slots:
 
     void on_readJointStatusBt_clicked();
 
+
 private:
 //    void initComm();
 //    bool isOpen();

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.11.0, 2022-10-30T23:31:42. -->
+<!-- Written by QtCreator 4.11.0, 2022-11-01T16:25:26. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -287,8 +287,9 @@
     </valuelist>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:E:/QT_project/ElectionBot-Debugger/ElectionBot-Debugger/ElectionBot-Debugger.pro</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">E:/QT_project/ElectionBot-Debugger/ElectionBot-Debugger/ElectionBot-Debugger.pro</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">ElectionBot-Debugger2</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:E:/C_project/maker-community/ElectronBot-fw/ElectionBot-Debugger/ElectionBot-Debugger/ElectionBot-Debugger.pro</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">E:/C_project/maker-community/ElectronBot-fw/ElectionBot-Debugger/ElectionBot-Debugger/ElectionBot-Debugger.pro</value>
     <value type="QString" key="RunConfiguration.Arguments"></value>
     <value type="bool" key="RunConfiguration.Arguments.multi">false</value>
     <value type="QString" key="RunConfiguration.OverrideDebuggerStartup"></value>
