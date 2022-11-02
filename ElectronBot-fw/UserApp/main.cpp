@@ -280,7 +280,7 @@ void RotationTestF(void)
   //      HAL_Delay(500);
   //  }
 
-     HAL_Delay(2000);
+     HAL_Delay(1000);
      electron.lcd->Init(Screen::DEGREE_0);
      electron.lcd->SetWindow(0, 239, 0, 239);
 
@@ -288,7 +288,7 @@ void RotationTestF(void)
      myPrintf("ElectionBot-fw (normal mode)\r\n");
      myPrintf("version is %s\r\n",VERSION);
      myPrintf("------------------------------------ \r\n");
-
+     HAL_Delay(1000);
 
 
    /*  electron.UpdateJointAngle(electron.joint[1], 0);
