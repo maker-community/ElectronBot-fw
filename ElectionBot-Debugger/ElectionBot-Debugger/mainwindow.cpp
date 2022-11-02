@@ -2661,3 +2661,11 @@ void MainWindow::on_Guide_triggered()
 {
       //QDesktopServices::openUrl(QUrl("https://docs.qq.com/doc/DRENCQkVMRm9HTE1m?ADPUBNO=27255&ADSESSION=1667225696&ADTAG=CLIENT.QQ.5929_.0&ADUIN=1580723783&tdsourcetag=s_pcqq_send_grpfile&u=c5d89916e0794e2b8e93e8e746fdd6ff"));
 }
+
+void MainWindow::on_version_triggered()
+{
+    QString str;
+    str.sprintf("%s\r\r",APP_VERSION);
+    QMessageBox::information(this, "版本", str
+            );
+}

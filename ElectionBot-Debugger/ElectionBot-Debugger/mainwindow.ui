@@ -2153,6 +2153,7 @@
     <addaction name="instructions"/>
     <addaction name="SourceCode"/>
     <addaction name="Guide"/>
+    <addaction name="version"/>
    </widget>
    <addaction name="menu"/>
   </widget>
@@ -2185,6 +2186,14 @@
    </property>
    <property name="toolTip">
     <string>小白入坑指南</string>
+   </property>
+  </action>
+  <action name="version">
+   <property name="text">
+    <string>版本</string>
+   </property>
+   <property name="toolTip">
+    <string>版本</string>
    </property>
   </action>
  </widget>

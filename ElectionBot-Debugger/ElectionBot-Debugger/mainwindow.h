@@ -169,6 +169,8 @@ private slots:
 
     void on_Guide_triggered();
 
+    void on_version_triggered();
+
 private:
 //    void initComm();
 //    bool isOpen();
