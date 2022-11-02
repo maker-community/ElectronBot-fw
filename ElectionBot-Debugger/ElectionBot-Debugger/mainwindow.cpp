@@ -1559,10 +1559,8 @@ void MainWindow::on_writeJointStatus_2_clicked()
    // }
 
 
-    //settings = new QSettings("setting.ini",QSettings::IniFormat);
+    settings = new QSettings("defaultJointStauts.ini",QSettings::IniFormat);
 
-    settings = new QSettings("https://gitee.com/xiao-xiaoming95/election-bot-firmware/raw/master/ElectronBot-fw/app/bin/setting.ini",QSettings::IniFormat);
-   // settings = new QSettings("setting.ini","https://gitee.com/xiao-xiaoming95/election-bot-firmware/raw/master/ElectronBot-fw/app/bin/setting.ini");
 
        //通过setValue函数将键值对放在相对于的节下面
        // 格式： settings->setValue("节名/键名","键值");
@@ -2217,7 +2215,9 @@ void MainWindow::on_instructions_triggered()
 {
    // QDesktopServices::openUrl(QUrl("https://docs.qq.com/doc/DRENCQkVMRm9HTE1m?ADPUBNO=27255&ADSESSION=1666151976&ADTAG=CLIENT.QQ.5929_.0&ADUIN=1580723783&tdsourcetag=s_pcqq_send_grpfile&u=c5d89916e0794e2b8e93e8e746fdd6ff"));
    // QDesktopServices::openUrl(QUrl("https://pan.baidu.com/s/1e5PZKQ_tphVfA2Pt378HgA?pwd=nt6k"));
-    QDesktopServices::openUrl(QUrl("https://gitee.com/xiao-xiaoming95/election-bot-firmware/raw/master/ElectronBot-fw/app/bin/app.bin"));
+   // QDesktopServices::openUrl(QUrl("https://gitee.com/xiao-xiaoming95/election-bot-firmware/raw/master/ElectronBot-fw/app/bin/app.bin"));
+    //QDesktopServices::openUrl(QUrl("https://docs.qq.com/doc/DRENCQkVMRm9HTE1m?ADPUBNO=27255&ADSESSION=1667225696&ADTAG=CLIENT.QQ.5929_.0&ADUIN=1580723783&tdsourcetag=s_pcqq_send_grpfile&u=c5d89916e0794e2b8e93e8e746fdd6ff"));
+    QDesktopServices::openUrl(QUrl("https://docs.qq.com/doc/DRHRuTFhYaWJETU5s?groupUin=VRFNT55LSO%252BEJoEkMPpVUw%253D%253D&ADUIN=1580723783&ADSESSION=1667377579&ADTAG=CLIENT.QQ.5929_.0&ADPUBNO=27255&jumpuin=1580723783&u=c5d89916e0794e2b8e93e8e746fdd6ff"));
 }
 
 
@@ -2651,3 +2651,13 @@ void MainWindow::on_readJointStatusBt_clicked()
 }
 
 
+
+void MainWindow::on_SourceCode_triggered()
+{
+     QDesktopServices::openUrl(QUrl("https://github.com/maker-community/ElectronBot-fw"));
+}
+
+void MainWindow::on_Guide_triggered()
+{
+      //QDesktopServices::openUrl(QUrl("https://docs.qq.com/doc/DRENCQkVMRm9HTE1m?ADPUBNO=27255&ADSESSION=1667225696&ADTAG=CLIENT.QQ.5929_.0&ADUIN=1580723783&tdsourcetag=s_pcqq_send_grpfile&u=c5d89916e0794e2b8e93e8e746fdd6ff"));
+}

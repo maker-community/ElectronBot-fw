@@ -415,10 +415,10 @@
       </rect>
      </property>
      <property name="currentText">
-      <string>4</string>
+      <string>2</string>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <property name="modelColumn">
       <number>0</number>
@@ -460,6 +460,9 @@
      </item>
     </widget>
     <widget class="QLineEdit" name="writeElectionBotIdEdit">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -499,6 +502,9 @@
      </property>
     </widget>
     <widget class="QLineEdit" name="electionBotIdEdit">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -584,6 +590,9 @@
      </item>
     </widget>
     <widget class="QGroupBox" name="groupBox_9">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>0</x>
@@ -770,7 +779,7 @@
          <double>1.000000000000000</double>
         </property>
         <property name="value">
-         <double>10.000000000000000</double>
+         <double>0.000000000000000</double>
         </property>
        </widget>
       </item>
@@ -782,58 +791,6 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="QDoubleSpinBox" name="modelAngleMaxDsb">
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="minimum">
-         <double>-180.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>180.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>30.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>mdoelAngleMax</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QDoubleSpinBox" name="angleMaxDsb">
-        <property name="decimals">
-         <number>2</number>
-        </property>
-        <property name="minimum">
-         <double>-180.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>180.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>40.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>angleMax</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
        <widget class="QDoubleSpinBox" name="modelAngleMinDsb">
         <property name="decimals">
          <number>1</number>
@@ -852,10 +809,62 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="3">
+      <item row="0" column="3">
        <widget class="QLabel" name="label_5">
         <property name="text">
          <string>modelAngleMin</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QDoubleSpinBox" name="angleMaxDsb">
+        <property name="decimals">
+         <number>1</number>
+        </property>
+        <property name="minimum">
+         <double>-180.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>180.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="value">
+         <double>0.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>angleMax</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QDoubleSpinBox" name="modelAngleMaxDsb">
+        <property name="decimals">
+         <number>1</number>
+        </property>
+        <property name="minimum">
+         <double>-180.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>180.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="value">
+         <double>0.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>mdoelAngleMax</string>
         </property>
        </widget>
       </item>
@@ -2143,6 +2152,7 @@
     <addaction name="about"/>
     <addaction name="instructions"/>
     <addaction name="SourceCode"/>
+    <addaction name="Guide"/>
    </widget>
    <addaction name="menu"/>
   </widget>
@@ -2167,6 +2177,14 @@
    </property>
    <property name="toolTip">
     <string>源码</string>
+   </property>
+  </action>
+  <action name="Guide">
+   <property name="text">
+    <string>小白入坑指南</string>
+   </property>
+   <property name="toolTip">
+    <string>小白入坑指南</string>
    </property>
   </action>
  </widget>

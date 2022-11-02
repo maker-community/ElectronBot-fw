@@ -165,6 +165,10 @@ private slots:
     void on_readJointStatusBt_clicked();
 
 
+    void on_SourceCode_triggered();
+
+    void on_Guide_triggered();
+
 private:
 //    void initComm();
 //    bool isOpen();
