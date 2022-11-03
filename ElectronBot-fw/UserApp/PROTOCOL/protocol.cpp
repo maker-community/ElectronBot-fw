@@ -543,6 +543,39 @@ void ProtocolProcessing(uint8_t* buf, uint16_t len)
     }
     BufClear((uint8_t* )&rxbuf,0,sizeof(rxbuf));
 }
+ uint32_t StatusReportingTimeCount=0;
+
+
+void StatusReportingOnce()
+{
+    ProtocolItem.cmd = CMD_ReadRobotSlavesConnectionStatus;
+    ProtocolItem.dataLen = sizeof(RobotSlavesConnectionStatus_t);
+    ProtocolItem.data = (uint8_t *) &RobotSlavesConnectionStatus;
+    ProtocolItem.frame = ResponseFrame;
+    ComposeProtocolFrame(txbuf.buf, &txbuf.dataLen, &ProtocolItem);
+// xMutex_Uart1 =xSemaphoreCreateMutex( );
+//xSemaphoreTake(xMutex_Uart1, portMAX_DELAY);
+    HAL_UART_Transmit(&huart1, (uint8_t *) &txbuf.buf, txbuf.dataLen, 0xFFFF);
+    HAL_Delay(10);
+}
+void StatusReporting()
+{
+
+    if(StatusReportingTimeCount>1000) {
+        StatusReportingTimeCount=0;
+        ProtocolItem.cmd = CMD_ReadRobotSlavesConnectionStatus;
+        ProtocolItem.dataLen = sizeof(RobotSlavesConnectionStatus_t);
+        ProtocolItem.data = (uint8_t *) &RobotSlavesConnectionStatus;
+        ProtocolItem.frame = ResponseFrame;
+        ComposeProtocolFrame(txbuf.buf, &txbuf.dataLen, &ProtocolItem);
+// xMutex_Uart1 =xSemaphoreCreateMutex( );
+//xSemaphoreTake(xMutex_Uart1, portMAX_DELAY);
+        HAL_UART_Transmit(&huart1, (uint8_t *) &txbuf.buf, txbuf.dataLen, 0xFFFF);
+        HAL_Delay(10);
+    }
+// xSemaphoreGive(xMutex_Uart1);
+
+}
 
 /*
 void JointStatusUpdata(void)
@@ -606,22 +639,22 @@ void JointStatusUpdata(void)
 
 void PrintfElectronBotJointStatus(ElectronBotJointStatus_t * Status,uint8_t id)
 {
-    HAL_Delay(40);
+   // HAL_Delay(40);
     myPrintf("*******joint%dStatus******\r\n",id);
-
+  //  HAL_Delay(40);
     myPrintf("angleMin=%f\r\n", Status->angleMin);
-
+  //  HAL_Delay(40);
     myPrintf("angleMax=%f\r\n", Status->angleMax);
-
+ //   HAL_Delay(40);
     myPrintf("modelAngelMin=%f\r\n", Status->modelAngelMin);
-
+ //   HAL_Delay(40);
     myPrintf("modelAngelMax=%f\r\n", Status->modelAngelMax);
-
+  //  HAL_Delay(40);
     myPrintf("torqueLimit=%f\r\n", Status->torqueLimit);
-
+  //  HAL_Delay(40);
     myPrintf("kp=%f\r\n", Status->kp);
+   // HAL_Delay(40);
 
-    HAL_Delay(40);
 
     /*myPrintf("\r\n");
 

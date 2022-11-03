@@ -175,5 +175,6 @@ bool PAJ7620_ConnectionStatusIs();
 void PAJ7620_InitStatusChange(bool InitStatus);
 bool PAJ7620_InitStatusIs();
 void PrintfElectronBotJointStatus(ElectronBotJointStatus_t * Status,uint8_t id);
-
+void StatusReporting();
+void StatusReportingOnce();
 #endif //PROTOCOL_H

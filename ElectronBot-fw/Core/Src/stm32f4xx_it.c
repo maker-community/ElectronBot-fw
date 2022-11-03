@@ -228,6 +228,7 @@ extern uint32_t  GestureTimeCount;
 extern uint32_t MPU_6050_read_time_count;
 extern uint32_t MPU_6050_init_time_count;
 extern uint32_t CheckJointsConnectionStatus_time_count;
+extern uint32_t StatusReportingTimeCount;
 void TIM8_TRG_COM_TIM14_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM8_TRG_COM_TIM14_IRQn 0 */
@@ -236,6 +237,7 @@ void TIM8_TRG_COM_TIM14_IRQHandler(void)
     GestureTimeCount++;
     MPU_6050_read_time_count++;
     MPU_6050_init_time_count++;
+    StatusReportingTimeCount++;
     CheckJointsConnectionStatus_time_count++;
   HAL_TIM_IRQHandler(&htim14);
   /* USER CODE BEGIN TIM8_TRG_COM_TIM14_IRQn 1 */

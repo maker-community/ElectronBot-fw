@@ -8,7 +8,7 @@
     return ch;
 }*/
 
-/*
+
 #ifdef __GNUC__									//串口重定向
 #define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
 #else
@@ -18,7 +18,7 @@ PUTCHAR_PROTOTYPE
 {
     HAL_UART_Transmit(&huart1 , (uint8_t *)&ch, 1, 0xFFFF);
     return ch;
-}*/
+}
 
 void myPrintf(const char* format, ...)
 {

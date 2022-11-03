@@ -200,6 +200,15 @@ void CheckJointsConnectionStatus()
 
 void rotationTest(void)
 {
+    char VERSION[]={"1.0.0.0"};
+    myPrintf("------------------------------------ \r\n");
+
+    myPrintf("ElectionBot-fw (rotation test mode)\r\n");
+    //myPrintf("ElectionBot-fw (rotation test mode)\r\n");
+    myPrintf("version is %s\r\n",VERSION);
+    myPrintf("------------------------------------ \r\n");
+    HAL_Delay(200);
+
     if(RotationTest.en_flag)
     {
         electron.joint[0].id = RotationTest.JointId;
@@ -221,6 +230,7 @@ void rotationTest(void)
                 float angle = i;
                 electron.UpdateJointAngle(electron.joint[0], angle);
                 myPrintf("joint %d angle:%f\r\n",electron.joint[0].id,angle);
+                StatusReportingOnce();
                 HAL_Delay(20);
             }
             for (int i = RotationTest.Angle.EndAngle; i > RotationTest.Angle.StartAngle  && RotationTest.en_flag ; i -= 1)
@@ -228,6 +238,7 @@ void rotationTest(void)
                 float angle = i;
                 electron.UpdateJointAngle(electron.joint[0], angle);
                 myPrintf("joint %d angle:%f\r\n",electron.joint[0].id,angle);
+                StatusReportingOnce();
                 HAL_Delay(20);
             }
         }
@@ -236,12 +247,29 @@ void rotationTest(void)
 }
  void paj7620Test()
  {
+     char VERSION[]={"1.0.0.0"};
+     myPrintf("------------------------------------ \r\n");
+
+     myPrintf("ElectionBot-fw (paj7620 test mode)\r\n");
+     //myPrintf("ElectionBot-fw (rotation test mode)\r\n");
+     myPrintf("version is %s\r\n",VERSION);
+     myPrintf("------------------------------------ \r\n");
+     HAL_Delay(200);
+
      GestureInit();
      while(1) Gesture();
  }
 
  void mpu6050Test()
  {
+     char VERSION[]={"1.0.0.0"};
+     myPrintf("------------------------------------ \r\n");
+
+     myPrintf("ElectionBot-fw (mpu6050 test mode)\r\n");
+     //myPrintf("ElectionBot-fw (rotation test mode)\r\n");
+     myPrintf("version is %s\r\n",VERSION);
+     myPrintf("------------------------------------ \r\n");
+     HAL_Delay(200);
      MPU_6050_init();
      while(1)MPU_6050_read();
  }
@@ -266,6 +294,7 @@ void rotationTest(void)
         // CheckJointsConnectionStatus();
        //  Gesture();
       //   MPU_6050_read();
+        // StatusReporting();
          uart1_data();
 
      }
@@ -289,6 +318,7 @@ void normalMode(void )
     HAL_Delay(200);
 
     JointStatusUpdata();
+     StatusReportingOnce();
     float t = 0;
 
     // electron.SetJointKp(electron.joint[2], 40);
