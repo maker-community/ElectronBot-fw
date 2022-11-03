@@ -492,7 +492,7 @@ QByteArray MainWindow::ReadRobotSlavesConnectionStatusProtocolBuf()
     return QByteArray((char*)txbuf.buf,txbuf.dataLen);
 }
 
-uint8_t  serialPortframebuf[2048]={0};
+uint8_t  serialPortframebuf[2048*10]={0};
 uint32_t serialPortframeDataLen=0;
 void MainWindow::DealSerialPortData()
 {
@@ -642,8 +642,8 @@ void MainWindow::handleTimeout(void)   // 定时器超时1S一次
        // str.sprintf("BinPacket.lenth()=%d",BinPacket.length());
        // printfLog(str);
 
-        //serialPort->write(BinPacket.data(),BinPacket.length());
-        serialPort->write(BinPacket.data(),512);
+        serialPort->write(BinPacket.data(),BinPacket.length());
+       // serialPort->write(BinPacket.data(),512);
     }
 
    if(ReadRobotSlavesConnection_time_count>(1000/TimerCell)) //更新连接状态
@@ -656,8 +656,7 @@ void MainWindow::handleTimeout(void)   // 定时器超时1S一次
        //QString str;
        //str = byteArray2Text(buf);
        //printfLog(str);
-
-       serialPort->write(buf.data(),buf.length());
+       if(ui->jointStatusReadEn->isChecked())serialPort->write(buf.data(),buf.length());
    }
 
    if(SerialPortReceice_time_counter>(15/TimerCell) && SerialPortReceiceNextPacket_flag==true)
@@ -665,6 +664,9 @@ void MainWindow::handleTimeout(void)   // 定时器超时1S一次
        DealSerialPortData();
        SerialPortReceice_time_counter=0;
        SerialPortReceiceNextPacket_flag=false;
+       serialPortframeDataLen=0;
+
+        memset(&serialPortframebuf[0],0,sizeof (serialPortframebuf));
    }
 
    if(UpdateRobotSlavesConnectionStatus_flag)
@@ -1203,9 +1205,10 @@ void MainWindow::serialPortReadRead_Slot()
     {
         SerialPortReceice_time_counter=0;
         serialPortframeDataLen=0;
-        SerialPortReceiceNextPacket_flag=true;
+
          memcpy(&serialPortframebuf[serialPortframeDataLen],receivedData.data(),receivedData.length());
          serialPortframeDataLen+=receivedData.length();
+         SerialPortReceiceNextPacket_flag=true;
     }
     else if(SerialPortReceiceNextPacket_flag==true)
     {
@@ -1507,7 +1510,7 @@ void MainWindow::on_jointRotationTestCloseBt_clicked()
 
 void MainWindow::on_resetMasterBt_clicked()
 {
-
+    cleanJointStatusCb();
     QString str = ui->electionBotIdEdit->text();
     ProtocolItem.ElectronBotID = str.toInt();
     str.sprintf("ElectronBotID=%d",ProtocolItem.ElectronBotID);
@@ -2514,6 +2517,7 @@ void MainWindow::printfDbugLog(QString str)
 
 void MainWindow::on_clearAllBt_clicked()
 {
+    cleanJointStatusCb();
     ui->serialPortLogEdit->clear();
      ui->USB_Recieve_Data->clear();
       ui->mainLogEdit->clear();
@@ -2701,4 +2705,18 @@ void MainWindow::on_version_triggered()
     str.sprintf("%s\r\r",APP_VERSION);
     QMessageBox::information(this, "版本", str
             );
+}
+
+
+void MainWindow::cleanJointStatusCb(void)
+{
+    ui->joint2Cb->setChecked(false);
+    ui->joint4Cb->setChecked(false);
+    ui->joint6Cb->setChecked(false);
+    ui->joint8Cb->setChecked(false);
+    ui->joint10Cb->setChecked(false);
+    ui->joint12Cb->setChecked(false);
+
+    ui->mpu6050Cb->setChecked(false);
+    ui->paj7620Cb->setChecked(false);
 }

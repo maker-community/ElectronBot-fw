@@ -4,11 +4,11 @@ QT       += printsupport
 QT       += network
 
 VERSION = 1.0.0.0
-//QT += serialport
-QT       += core gui serialport
+QT += serialport
+//QT       += core gui serialport
 //QT += QDateTime
 //QT += QTime
-CONFIG += c++11
+//CONFIG += c++11
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = ElectionBot-Debugger

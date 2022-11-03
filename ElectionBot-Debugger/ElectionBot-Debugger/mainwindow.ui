@@ -1078,7 +1078,7 @@
       <x>820</x>
       <y>20</y>
       <width>371</width>
-      <height>521</height>
+      <height>501</height>
      </rect>
     </property>
     <property name="title">
@@ -1114,7 +1114,7 @@
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>490</y>
+       <y>480</y>
        <width>341</width>
        <height>21</height>
       </rect>
@@ -1360,10 +1360,10 @@
    <widget class="QGroupBox" name="groupBox_11">
     <property name="geometry">
      <rect>
-      <x>810</x>
-      <y>540</y>
-      <width>201</width>
-      <height>202</height>
+      <x>820</x>
+      <y>520</y>
+      <width>163</width>
+      <height>224</height>
      </rect>
     </property>
     <property name="title">
@@ -1371,55 +1371,62 @@
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
      <item row="0" column="0">
+      <widget class="QCheckBox" name="jointStatusReadEn">
+       <property name="text">
+        <string>状态每秒自动更新使能</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
       <widget class="QCheckBox" name="joint2Cb">
        <property name="text">
         <string>头部/joint2</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item row="2" column="0">
       <widget class="QCheckBox" name="joint4Cb">
        <property name="text">
         <string>左臂夹角/joint4</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item row="3" column="0">
       <widget class="QCheckBox" name="joint6Cb">
        <property name="text">
         <string>左臂上下旋转/joint6</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item row="4" column="0">
       <widget class="QCheckBox" name="joint8Cb">
        <property name="text">
         <string>右臂夹角/joint8</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item row="5" column="0">
       <widget class="QCheckBox" name="joint10Cb">
        <property name="text">
         <string>右臂上下旋转/joint10</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="0">
+     <item row="6" column="0">
       <widget class="QCheckBox" name="joint12Cb">
        <property name="text">
         <string>身体左右旋转/joint12</string>
        </property>
       </widget>
      </item>
-     <item row="6" column="0">
+     <item row="7" column="0">
       <widget class="QCheckBox" name="mpu6050Cb">
        <property name="text">
         <string>六轴传感器/mpu6050</string>
        </property>
       </widget>
      </item>
-     <item row="7" column="0">
+     <item row="8" column="0">
       <widget class="QCheckBox" name="paj7620Cb">
        <property name="text">
         <string>手势识别/paj7620</string>

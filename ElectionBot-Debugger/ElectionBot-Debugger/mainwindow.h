@@ -191,6 +191,7 @@ private:
     void PrintfElectronBotJointStatus(ElectronBotJointStatus_t * Status,uint8_t id);
     void myPrintf(const char* format, ...);
     void showBinFileInfo();
+    void cleanJointStatusCb(void);
 };
 
 #endif // MAINWINDOW_H
