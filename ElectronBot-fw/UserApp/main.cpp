@@ -258,6 +258,7 @@ void rotationTest(void)
      HAL_Delay(200);
 
      GestureInit();
+     StatusReportingOnce();
      while(1) Gesture();
  }
 
@@ -272,6 +273,7 @@ void rotationTest(void)
      myPrintf("------------------------------------ \r\n");
      HAL_Delay(200);
      MPU_6050_init();
+     StatusReportingOnce();
      while(1)MPU_6050_read();
  }
 
@@ -408,10 +410,10 @@ void normalMode(void )
      electron.lcd->SetWindow(0, 239, 0, 239);
 
 
-     //while(1)normalMode();
-     while(1)rotationTest();
+    // while(1)normalMode();
+     //while(1)rotationTest();
      //while(1)paj7620Test();
-     //while(1)mpu6050Test();
+     while(1)mpu6050Test();
 
 
    /*  electron.UpdateJointAngle(electron.joint[1], 0);
