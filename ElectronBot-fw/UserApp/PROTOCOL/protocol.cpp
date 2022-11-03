@@ -527,7 +527,7 @@ void ProtocolProcessing(uint8_t* buf, uint16_t len)
     if(ProtocolItem.cmd == CMD_ResetMaster)
     {
         HAL_Delay(100);
-        myPrintf("SystemReset\r\n");
+        myPrintf("system reset\r\n");
         HAL_Delay(100);
         HAL_NVIC_SystemReset();
     }
@@ -535,7 +535,7 @@ void ProtocolProcessing(uint8_t* buf, uint16_t len)
     if (ProtocolItem.cmd == CMD_IAP || ProtocolItem.cmd == (CMD_IAP |0x80))
     {
         HAL_Delay(100);
-        myPrintf("SystemReset for IAP\r\n");
+        myPrintf("system reset for IAP\r\n");
         HAL_Delay(100);
         IAP_FlashErase3();
         __disable_irq();

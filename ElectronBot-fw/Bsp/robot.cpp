@@ -102,6 +102,7 @@ extern bool gesture_iic_lock ;
 extern bool iic_lock;
 //bool gesture_iic_lock = false;
 extern SemaphoreHandle_t xMutex;
+extern bool iicFailPrintfEn;
 void Robot::TransmitAndReceiveI2cPacket(uint8_t _id)
 {
     HAL_StatusTypeDef state = HAL_ERROR;
@@ -118,6 +119,20 @@ void Robot::TransmitAndReceiveI2cPacket(uint8_t _id)
         iicreTry--;
     } while (state != HAL_OK && iicreTry>0);
     iicreTry=2;
+
+    if(state==HAL_OK)
+    {
+        JointsConnectionStatusChange(_id, true);
+    }else
+    {
+        JointsConnectionStatusChange(_id, false);
+        if(iicFailPrintfEn==true)
+        {
+            myPrintf("iic write joint%d fail\r\n",_id);
+            HAL_Delay(20);
+        }
+    }
+    state = HAL_ERROR;
     do
     {
         state = HAL_I2C_Master_Receive(motorI2c, _id, i2cRxData, 5, 5);
@@ -125,12 +140,18 @@ void Robot::TransmitAndReceiveI2cPacket(uint8_t _id)
     } while (state != HAL_OK && iicreTry>0);
    // HAL_Delay(1);
    // iic_lock= false;
+
    if(state==HAL_OK)
    {
        JointsConnectionStatusChange(_id, true);
    }else
    {
        JointsConnectionStatusChange(_id, false);
+       if(iicFailPrintfEn==true)
+       {
+           myPrintf("iic read joint%d fail\r\n",_id);
+           HAL_Delay(20);
+       }
    }
 
     xSemaphoreGive(xMutex);

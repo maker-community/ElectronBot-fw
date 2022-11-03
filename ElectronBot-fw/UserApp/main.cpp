@@ -197,7 +197,7 @@ void CheckJointsConnectionStatus()
  }
 
  extern struct RotationTest_t RotationTest;
-
+ bool iicFailPrintfEn= false;
 void rotationTest(void)
 {
     char VERSION[]={"1.0.0.0"};
@@ -208,41 +208,42 @@ void rotationTest(void)
     myPrintf("version is %s\r\n",VERSION);
     myPrintf("------------------------------------ \r\n");
     HAL_Delay(200);
+     iicFailPrintfEn=true;
+    while(1) {
+        if (RotationTest.en_flag) {
+            electron.joint[0].id = RotationTest.JointId;
+            electron.joint[0].angleMin = 0;
+            electron.joint[0].angleMax = 180;
+            electron.joint[0].angle = 0;
+            electron.joint[0].modelAngelMin = -90;
+            electron.joint[0].modelAngelMax = 90;
 
-    if(RotationTest.en_flag)
-    {
-        electron.joint[0].id = RotationTest.JointId;
-        electron.joint[0].angleMin = 0;
-        electron.joint[0].angleMax = 180;
-        electron.joint[0].angle = 0;
-        electron.joint[0].modelAngelMin = -90;
-        electron.joint[0].modelAngelMax = 90;
+            // 2.使用广播地址是能
+            electron.SetJointEnable(electron.joint[0], true);
 
-        // 2.使用广播地址是能
-        electron.SetJointEnable(electron.joint[0], true);
-
-        // 3.这时候就能看到舵机做往复运动了。
-        while (RotationTest.en_flag)
-         //   while (1)
-        {
-            for (int i = RotationTest.Angle.StartAngle; i < RotationTest.Angle.EndAngle && RotationTest.en_flag ; i += 1)
+            // 3.这时候就能看到舵机做往复运动了。
+            while (RotationTest.en_flag)
+                //   while (1)
             {
-                float angle = i;
-                electron.UpdateJointAngle(electron.joint[0], angle);
-                myPrintf("joint %d angle:%f\r\n",electron.joint[0].id,angle);
-                StatusReportingOnce();
-                HAL_Delay(20);
+                for (int i = RotationTest.Angle.StartAngle;
+                     i < RotationTest.Angle.EndAngle && RotationTest.en_flag; i += 1) {
+                    float angle = i;
+                    electron.UpdateJointAngle(electron.joint[0], angle);
+                    myPrintf("joint %d angle:%f\r\n", electron.joint[0].id, angle);
+                    StatusReportingOnce();
+                    HAL_Delay(20);
+                }
+                for (int i = RotationTest.Angle.EndAngle;
+                     i > RotationTest.Angle.StartAngle && RotationTest.en_flag; i -= 1) {
+                    float angle = i;
+                    electron.UpdateJointAngle(electron.joint[0], angle);
+                    myPrintf("joint %d angle:%f\r\n", electron.joint[0].id, angle);
+                    StatusReportingOnce();
+                    HAL_Delay(20);
+                }
             }
-            for (int i = RotationTest.Angle.EndAngle; i > RotationTest.Angle.StartAngle  && RotationTest.en_flag ; i -= 1)
-            {
-                float angle = i;
-                electron.UpdateJointAngle(electron.joint[0], angle);
-                myPrintf("joint %d angle:%f\r\n",electron.joint[0].id,angle);
-                StatusReportingOnce();
-                HAL_Delay(20);
-            }
+            electron.SetJointEnable(electron.joint[0], false);
         }
-        electron.SetJointEnable(electron.joint[0], false);
     }
 }
  void paj7620Test()
@@ -407,8 +408,8 @@ void normalMode(void )
      electron.lcd->SetWindow(0, 239, 0, 239);
 
 
-     while(1)normalMode();
-     //while(1)rotationTest();
+     //while(1)normalMode();
+     while(1)rotationTest();
      //while(1)paj7620Test();
      //while(1)mpu6050Test();
 
