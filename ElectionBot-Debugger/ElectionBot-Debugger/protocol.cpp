@@ -193,20 +193,20 @@ uint8_t ProtocolProcessing(uint8_t* buf, uint16_t len)
     idbuf = ProtocolItem.jointID / 2;
     if (ProtocolItem.cmd == CMD_WriteAllJointStatus || ProtocolItem.cmd == (CMD_WriteAllJointStatus |0x80))
     {
-         test = (ElectronBotJointStatus_t*)ProtocolItem.data;
-        myprintf("cmd=CMD_WriteAllJointStatus\r\n");
-        myprintf("angleMax=%f\r\n", test->angleMax);
-        myprintf("angle=%f\r\n", test->angle);
-        myprintf("modelAngelMin=%f\r\n", test->modelAngelMin);
-        myprintf("modelAngelMax=%f\r\n", test->modelAngelMax);
-        myprintf("inverted=%s\r\n", test->inverted ? "true" : "false");
-        myprintf("initAngle=%f\r\n", test->initAngle);
-        myprintf("torqueLimit=%f\r\n", test->torqueLimit);
-        myprintf("kp=%f\r\n", test->kp);
-        myprintf("ki=%f\r\n", test->ki);
-        myprintf("kv=%f\r\n", test->kv);
-        myprintf("kd=%f\r\n", test->kd);
-        myprintf("enable=%s\r\n", test->enable ? "true" : "false");
+       //  test = (ElectronBotJointStatus_t*)ProtocolItem.data;
+       // myprintf("cmd=CMD_WriteAllJointStatus\r\n");
+       // myprintf("angleMax=%f\r\n", test->angleMax);
+       // myprintf("angle=%f\r\n", test->angle);
+       // myprintf("modelAngelMin=%f\r\n", test->modelAngelMin);
+      //  myprintf("modelAngelMax=%f\r\n", test->modelAngelMax);
+      //  myprintf("inverted=%s\r\n", test->inverted ? "true" : "false");
+      //  myprintf("initAngle=%f\r\n", test->initAngle);
+     //   myprintf("torqueLimit=%f\r\n", test->torqueLimit);
+     //   myprintf("kp=%f\r\n", test->kp);
+     //   myprintf("ki=%f\r\n", test->ki);
+     //   myprintf("kv=%f\r\n", test->kv);
+     //   myprintf("kd=%f\r\n", test->kd);
+     //   myprintf("enable=%s\r\n", test->enable ? "true" : "false");
         return CMD_WriteAllJointStatus;
     }
 

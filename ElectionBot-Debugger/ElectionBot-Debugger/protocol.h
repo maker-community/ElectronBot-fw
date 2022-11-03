@@ -114,14 +114,14 @@ struct ProtocolItem_t {
 
 struct txbuf_t {
     uint16_t dataLen;
-    uint8_t buf[300];
+    uint8_t buf[600];
 };
 //txbuf_t txbuf;
 
 struct rxbuf_t {
     uint16_t dataLen;
     uint8_t* frameHead;
-    uint8_t buf[300];
+    uint8_t buf[600];
 };
 //rxbuf_t rxbuf;
 

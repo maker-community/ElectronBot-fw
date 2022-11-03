@@ -41,6 +41,7 @@ long            BeginItems;
 long            DeltaItem =1;
 
 #define          TimerCell 1
+//#define          TimerCell 5
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -308,6 +309,9 @@ QByteArray MainWindow::IAP()
     str.sprintf("iap.currentPacket is %d, iap.crc32 is 0x%08x\r\n",iap.currentPacket,iap.crc32);
     printfDbugLog(str);
 
+    //str.sprintf("currentPacketData=%d\r\n",currentPacketData.length());
+    //printfLog(str);
+
 
     return currentPacketData;
 }
@@ -438,12 +442,12 @@ QByteArray MainWindow::writeBinPacketToProtocolBuf(QByteArray BinPacketData)
    // QDateTime current_date_time = QDateTime::currentDateTime();
    // QString current_date = current_date_time.toString("yyyy.MM.dd hh:mm:ss.zzz");
    // printfLog(QString(current_date));
+    QByteArray reArry;
+    QString str;
+    str.sprintf("writeBinPacketToProtocolBuf");
+    printfDbugLog(QString(str));
 
-    QString testprintf;
-    testprintf.sprintf("writeBinPacketToProtocolBuf");
-    printfDbugLog(QString(testprintf));
-
-    QString str = ui->electionBotIdEdit->text();
+    str = ui->electionBotIdEdit->text();
     ProtocolItem.ElectronBotID = str.toInt();
     str.sprintf("ElectronBotID=%d",ProtocolItem.ElectronBotID);
     printfDbugLog(QString(str));
@@ -463,10 +467,19 @@ QByteArray MainWindow::writeBinPacketToProtocolBuf(QByteArray BinPacketData)
      ProtocolItem.dataLen = BinPacketData.length();
      ProtocolItem.data = (uint8_t *)BinPacketData.data();
 
+    // str.sprintf("ProtocolItem.dataLen=%d",ProtocolItem.dataLen);
+    // printfLog(str);
+
     // memset(&txbuf.buf,0,sizeof (txbuf.buf));
     // txbuf.dataLen=0;
      ComposeProtocolFrame(txbuf.buf, &txbuf.dataLen, &ProtocolItem);
-     return QByteArray((char*)txbuf.buf,txbuf.dataLen);
+
+     //str.sprintf("txbuf.dataLen=%d",txbuf.dataLen);
+     //printfLog(str);
+
+     reArry=QByteArray((char*)txbuf.buf,txbuf.dataLen);
+     return reArry;
+     //return QByteArray((char*)txbuf.buf,txbuf.dataLen);
 }
 
 QByteArray MainWindow::ReadRobotSlavesConnectionStatusProtocolBuf()
@@ -483,7 +496,7 @@ uint8_t  serialPortframebuf[2048]={0};
 uint32_t serialPortframeDataLen=0;
 void MainWindow::DealSerialPortData()
 {
-    QString recvText;
+    QString str;
 
     QByteArray receivedData;
     uint8_t cmd=0;
@@ -507,8 +520,9 @@ void MainWindow::DealSerialPortData()
 
 
                 QByteArray BinPacket;
-                //BinPacket=writeBinPacketToProtocolBuf(IAP());
-                BinPacket=writeBinPacketToProtocolBuf(iapframe());
+                BinPacket.clear();
+                BinPacket=writeBinPacketToProtocolBuf(IAP());
+                //BinPacket=writeBinPacketToProtocolBuf(iapframe());
 
 
                 str.sprintf("packetSum is %d current packet %d\r\n",iap.packetSum,iap.currentPacket);
@@ -517,6 +531,10 @@ void MainWindow::DealSerialPortData()
                 QDateTime current_date_time = QDateTime::currentDateTime();
                 QString current_date = current_date_time.toString("yyyy.MM.dd hh:mm:ss.zzz");
                 printfDbugLog(current_date);
+              //  serialPort->clear();
+
+               // str.sprintf("BinPacket.lenth()=%d",BinPacket.length());
+               // printfLog(str);
 
                 serialPort->write(BinPacket.data(),BinPacket.length());
             }
@@ -548,7 +566,11 @@ void MainWindow::DealSerialPortData()
         //QString current_date = current_date_time.toString("yyyy.MM.dd hh:mm:ss.zzz ddd");
         QString current_date = current_date_time.toString("yyyy.MM.dd hh:mm:ss.zzz");
         ui->serialPortLogEdit->appendPlainText(QString(current_date));
+
+        str.sprintf("receivedData.dataLen=%d",receivedData.length());
+        ui->serialPortLogEdit->appendPlainText(str);
     }
+
 
     QString buf = QString(receivedData);
     ui->serialPortLogEdit->appendPlainText(buf);
@@ -600,8 +622,9 @@ void MainWindow::handleTimeout(void)   // 定时器超时1S一次
         IAP_time_count=0;
         iap.waitPacketResponseTimeCount=0;
 
-           QByteArray BinPacket;
-          BinPacket=writeBinPacketToProtocolBuf(iapframe());
+          // QByteArray BinPacket;
+        BinPacket=writeBinPacketToProtocolBuf(IAP());
+         // BinPacket=writeBinPacketToProtocolBuf(iapframe());
 
         str.sprintf("packetSum is %d current packet %d\r\n",iap.packetSum,iap.currentPacket);
         printfDbugLog(str);
@@ -616,7 +639,11 @@ void MainWindow::handleTimeout(void)   // 定时器超时1S一次
        // if(iap.currentPacket<3)
        // printfLog(str);
 
-        serialPort->write(BinPacket.data(),BinPacket.length());
+       // str.sprintf("BinPacket.lenth()=%d",BinPacket.length());
+       // printfLog(str);
+
+        //serialPort->write(BinPacket.data(),BinPacket.length());
+        serialPort->write(BinPacket.data(),512);
     }
 
    if(ReadRobotSlavesConnection_time_count>(1000/TimerCell)) //更新连接状态
@@ -624,11 +651,13 @@ void MainWindow::handleTimeout(void)   // 定时器超时1S一次
        QByteArray buf;
        ReadRobotSlavesConnection_time_count=0;
 
-       /*buf=ReadRobotSlavesConnectionStatusProtocolBuf();
-       QString recvText;
-       recvText = byteArray2Text(buf);
-       printfLog(recvText);
-       serialPort->write(buf.data(),buf.length());*/
+       buf=ReadRobotSlavesConnectionStatusProtocolBuf();
+
+       //QString str;
+       //str = byteArray2Text(buf);
+       //printfLog(str);
+
+       serialPort->write(buf.data(),buf.length());
    }
 
    if(SerialPortReceice_time_counter>(15/TimerCell) && SerialPortReceiceNextPacket_flag==true)
@@ -870,16 +899,73 @@ void MainWindow::on_about_triggered()
 // 功能描述
 void MainWindow::on_function_triggered()
 {
-    QMessageBox::information(this, "提示", "输入USB设备端的PID和PID编号后，可以与电子进行USB通讯\r\n"
-                                          "打开串口后，可以与电子进行串口通讯"
+    QMessageBox::information(this, "提示", "打开串口后，可以与电子进行串口通讯"
             );
 }
 
 
 
+void MainWindow::myPrintf(const char* format, ...)
+{
+ //   QString str;
+ //   QByteArray buf;
+  //  sprintf(buf.data(),format);
+
+ //   str=QString(buf);
+    //str.sprintf( (char*) format);
+ //   printfLog(str);
+}
+
+void MainWindow::PrintfElectronBotJointStatus(ElectronBotJointStatus_t * Status,uint8_t id)
+{
+
+       QString str;
+       str.sprintf("*******joint%dStatus******\r\n",id);
+       printfLog(str);
+
+       str.sprintf("angleMin=%f\r\n", Status->angleMin);
+       printfLog(str);
+
+       str.sprintf("angleMax=%f\r\n", Status->angleMax);
+       printfLog(str);
+
+       str.sprintf("modelAngelMin=%f\r\n", Status->modelAngelMin);
+       printfLog(str);
+
+       str.sprintf("modelAngelMax=%f\r\n", Status->modelAngelMax);
+       printfLog(str);
+
+       str.sprintf("torqueLimit=%f\r\n", Status->torqueLimit);
+       printfLog(str);
+
+       str.sprintf("kp=%f\r\n", Status->kp);
+       printfLog(str);
+
+       /*str.sprintf("\r\n");
 
 
+       str.sprintf("initAngle=%f\r\n", Status->initAngle);
+       printfLog(str);
 
+       str.sprintf("angle=%f\r\n", Status->angle);
+       printfLog(str);
+
+       str.sprintf("ki=%f\r\n", Status->ki);
+       printfLog(str);
+
+       str.sprintf("kv=%f\r\n", Status->kv);
+       printfLog(str);
+
+       str.sprintf("kd=%f\r\n", Status->kd);
+       printfLog(str);
+
+       str.sprintf("enable=%s\r\n", Status->enable ? "true" : "false");
+       printfLog(str);
+
+       str.sprintf("inverted=%s\r\n", Status->inverted ? "true" : "false");
+        printfLog(str);
+*/
+}
 
 QByteArray MainWindow::writeJointStatusToBuf(void)
 {
@@ -923,47 +1009,52 @@ QByteArray MainWindow::writeJointStatusToBuf(void)
 
      JointStatus.angleMin = ui->angleMinDsb->value();
      str.sprintf("angleMin=%lf",JointStatus.angleMin);
-     printfLog(QString(str));
+    // printfLog(QString(str));
 
      JointStatus.angleMax = ui->angleMaxDsb->value();
      str.sprintf("angleMax=%lf",JointStatus.angleMax);
-     printfLog(QString(str));
+    // printfLog(QString(str));
 
      JointStatus.modelAngelMin = ui->modelAngleMinDsb->value();
      str.sprintf("angleMin=%lf",JointStatus.modelAngelMin);
-     printfLog(QString(str));
+    // printfLog(QString(str));
 
      JointStatus.modelAngelMax = ui->modelAngleMaxDsb->value();
      str.sprintf("angleMax=%lf",JointStatus.modelAngelMax);
-     printfLog(QString(str));
+   //  printfLog(QString(str));
 
-     JointStatus.initAngle = ui->initAngleDsb->value();
-     str.sprintf("initAngle=%lf",JointStatus.initAngle);
-     printfLog(QString(str));
-
-     JointStatus.angle = ui->angleDsb->value();
-     str.sprintf("angle=%lf",JointStatus.angle);
-     printfLog(QString(str));
 
      JointStatus.torqueLimit = ui->torqueLimitDsb->value();
      str.sprintf("torqueLimit=%lf",JointStatus.torqueLimit);
-     printfLog(QString(str));
+    // printfLog(QString(str));
 
      JointStatus.kp = ui->kpDsb->value();
      str.sprintf("kp=%lf",JointStatus.kp);
-     printfLog(QString(str));
+   //  printfLog(QString(str));
+
+  //   str.sprintf("\r\n");
+  //   printfLog(QString(str));
+
+
+     JointStatus.initAngle = ui->initAngleDsb->value();
+     str.sprintf("initAngle=%lf",JointStatus.initAngle);
+  //   printfLog(QString(str));
+
+     JointStatus.angle = ui->angleDsb->value();
+     str.sprintf("angle=%lf",JointStatus.angle);
+ //    printfLog(QString(str));
 
      JointStatus.ki = ui->kiDsb->value();
      str.sprintf("ki=%lf",JointStatus.ki);
-     printfLog(QString(str));
+   //  printfLog(QString(str));
 
      JointStatus.kv = ui->kvDsb->value();
      str.sprintf("kv=%lf",JointStatus.kv);
-     printfLog(QString(str));
+   //  printfLog(QString(str));
 
      JointStatus.kd = ui->kdDsb->value();
      str.sprintf("kd=%lf",JointStatus.kd);
-     printfLog(QString(str));
+  //   printfLog(QString(str));
 
      if(ui->enableCb->isChecked())
      {
@@ -974,7 +1065,7 @@ QByteArray MainWindow::writeJointStatusToBuf(void)
         JointStatus.enable = 0;
      }
      str.sprintf("enable=%s",JointStatus.enable?"true" :"false");
-     printfLog(QString(str));
+   //  printfLog(QString(str));
 
      if(ui->invertedCb->isChecked())
      {
@@ -985,7 +1076,9 @@ QByteArray MainWindow::writeJointStatusToBuf(void)
         JointStatus.inverted = 0;
      }
      str.sprintf("inverted=%s",JointStatus.inverted?"true" :"false");
-     printfLog(QString(str));
+   //  printfLog(QString(str));
+
+     PrintfElectronBotJointStatus(&JointStatus,ProtocolItem.jointID);
 
      ProtocolItem.dataLen = sizeof(JointStatus);
      ProtocolItem.data = (uint8_t *)&JointStatus;
@@ -1001,69 +1094,9 @@ QByteArray MainWindow::writeJointStatusToBuf(void)
 
 void MainWindow::on_writeJointStatus_clicked()
 {
-    //ProtocolItem.ElectronBotID = ui->electionBotIdEdit->test();
-
-  /* myprintf("hello QT");
-
-   QString testprintf;
-   testprintf.sprintf("hello QT");
-   printfLog(QString(testprintf));
-
-    QString str=ui->electionBotIdEdit->text();
-    ProtocolItem.ElectronBotID = str.toInt();
-    testprintf.sprintf("ElectronBotID=%d",ProtocolItem.ElectronBotID);
-    printfLog(QString(testprintf));
-
-    int a=33;
-    ui->electionBotIdEdit->setText(testprintf.number(a,10));
-
-    str = ui->jointIdCb->currentText();
-    ProtocolItem.jointID = str.toInt();
-
-    ProtocolItem.cmd =CMD_WriteAllJointStatus;
-
-    JointStatus_t JointStatus;
-    testComposeProtocolFrame();
-
-    for(int i=0 ; i<100 ; i++)
-    {
-        sendTestBuf[i]=i;
-    }*/
-
     QByteArray sendData = writeJointStatusToBuf();
 
      serialPort->write(sendData.data(),sendData.length());
-
-   // QByteArray sendData = QByteArray((char*)sendTestBuf,100);
-
-   /* QString showData;
-    showData = byteArray2Text(sendData);
-    printfLog(QString(showData));
-
-    char *SendDataChar;
-    SendDataChar = sendData.data();
-
-    if(ui->checkBox_send->isChecked())
-    {
-        if(ui->Data_Send->text() == "发送")
-        {
-            int ret = USB_Write_Process(SendDataChar,sendData.length(),100);
-            int time_interval =ui->lineEdit_send->text().toInt();
-            timer_Send.start( time_interval );
-            ui->Data_Send->setText("停止发送");
-            ui->checkBox_send->setEnabled(false);
-        }
-        else
-        {
-            timer_Send.stop();
-            ui->Data_Send->setText("发送");
-            ui->checkBox_send->setEnabled(true);
-        }
-    }
-    else
-    {
-           int ret = USB_Write_Process(SendDataChar,sendData.length(),100);
-    }*/
 }
 
 
@@ -2659,7 +2692,7 @@ void MainWindow::on_SourceCode_triggered()
 
 void MainWindow::on_Guide_triggered()
 {
-      //QDesktopServices::openUrl(QUrl("https://docs.qq.com/doc/DRENCQkVMRm9HTE1m?ADPUBNO=27255&ADSESSION=1667225696&ADTAG=CLIENT.QQ.5929_.0&ADUIN=1580723783&tdsourcetag=s_pcqq_send_grpfile&u=c5d89916e0794e2b8e93e8e746fdd6ff"));
+      QDesktopServices::openUrl(QUrl("https://docs.qq.com/doc/DRENCQkVMRm9HTE1m?ADPUBNO=27255&ADSESSION=1667225696&ADTAG=CLIENT.QQ.5929_.0&ADUIN=1580723783&tdsourcetag=s_pcqq_send_grpfile&u=c5d89916e0794e2b8e93e8e746fdd6ff"));
 }
 
 void MainWindow::on_version_triggered()

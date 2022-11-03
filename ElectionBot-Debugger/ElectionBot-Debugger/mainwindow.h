@@ -18,6 +18,8 @@
 #include <QtCore/QCoreApplication>
 #include <QSettings>
 
+#include <protocol.h>
+
 #define Rx_Lenth 32*1024   // USB 接收缓冲区大小
 
 
@@ -184,7 +186,10 @@ private:
     QByteArray writeBinPacketToProtocolBuf(QByteArray BinPacketData);
     QByteArray iapframe(void);
     QString IAP_init();
+    //QByteArray IAP();
     QByteArray IAP();
+    void PrintfElectronBotJointStatus(ElectronBotJointStatus_t * Status,uint8_t id);
+    void myPrintf(const char* format, ...);
     void showBinFileInfo();
 };
 
