@@ -142,8 +142,8 @@ extern bool iic_lock;
  {
      if(recv_end_flag ==1)//接收完成标志
      {
-         printf("\r\n");
-         HAL_Delay(5);
+       //  printf("\r\n");
+       //  HAL_Delay(5);
          //printf("数据长度=%d\r\n",Rx_len);//打印接收到的数据长度
          //printf("数据内容:");
 
@@ -165,11 +165,11 @@ extern bool iic_lock;
           //     HAL_Delay(5);
           // }
 
-         HAL_Delay(20);
+      //   HAL_Delay(20);
          //WriteFlashu8tou32(APPLICATION_ADDRESS,ReceiveBuff,Rx_len);
          ProtocolProcessing(ReceiveBuff,Rx_len);
-         printf("\r\n");
-         HAL_Delay(5);
+       //  printf("\r\n");
+       //  HAL_Delay(5);
          for(int i = 0; i < Rx_len ; i++) //清空接收缓存区
              ReceiveBuff[i]=0;//置0
          Rx_len=0;//接收数据长度清零
@@ -272,7 +272,7 @@ void RotationTestF(void)
 
      //while(1)uart1_data();
      //while(1);
-    // while(1)RotationTestF();
+
 
    // while(1)
    // {
@@ -280,16 +280,18 @@ void RotationTestF(void)
   //      HAL_Delay(500);
   //  }
 
-     HAL_Delay(1000);
+     HAL_Delay(500);
      electron.lcd->Init(Screen::DEGREE_0);
      electron.lcd->SetWindow(0, 239, 0, 239);
 
      myPrintf("------------------------------------ \r\n");
      myPrintf("ElectionBot-fw (normal mode)\r\n");
+     //myPrintf("ElectionBot-fw (rotation test mode)\r\n");
      myPrintf("version is %s\r\n",VERSION);
      myPrintf("------------------------------------ \r\n");
-     HAL_Delay(1000);
+     HAL_Delay(200);
 
+    // while(1)RotationTestF();
 
    /*  electron.UpdateJointAngle(electron.joint[1], 0);
      electron.UpdateJointAngle(electron.joint[2], 0);

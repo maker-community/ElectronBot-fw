@@ -302,35 +302,8 @@ void ProtocolProcessing(uint8_t* buf, uint16_t len)
     if (ProtocolItem.cmd == CMD_WriteAllJointStatus || ProtocolItem.cmd == (CMD_WriteAllJointStatus |0x80))
     {
         test = (ElectronBotJointStatus_t*)ProtocolItem.data;
-        HAL_Delay(20);
-        myPrintf("cmd=CMD_WriteAllJointStatus\r\n");
-        HAL_Delay(20);
-        myPrintf("angleMin=%f\r\n", test->angleMin);
-        HAL_Delay(20);
-        myPrintf("angleMax=%f\r\n", test->angleMax);
-        HAL_Delay(20);
-        myPrintf("angle=%f\r\n", test->angle);
-        HAL_Delay(20);
-        myPrintf("modelAngelMin=%f\r\n", test->modelAngelMin);
-        HAL_Delay(20);
-        myPrintf("modelAngelMax=%f\r\n", test->modelAngelMax);
-        HAL_Delay(20);
-        myPrintf("inverted=%s\r\n", test->inverted ? "true" : "false");
-        HAL_Delay(20);
-        myPrintf("initAngle=%f\r\n", test->initAngle);
-        HAL_Delay(20);
-        myPrintf("torqueLimit=%f\r\n", test->torqueLimit);
-        HAL_Delay(20);
-        myPrintf("kp=%f\r\n", test->kp);
-        HAL_Delay(20);
-        myPrintf("ki=%f\r\n", test->ki);
-        HAL_Delay(20);
-        myPrintf("kv=%f\r\n", test->kv);
-        HAL_Delay(20);
-        myPrintf("kd=%f\r\n", test->kd);
-        HAL_Delay(20);
-        myPrintf("enable=%s\r\n", test->enable ? "true" : "false");
-        HAL_Delay(20);
+
+        PrintfElectronBotJointStatus(test,ProtocolItem.jointID);
     }
 
     //uint8_t idbuf=0;
@@ -343,8 +316,6 @@ void ProtocolProcessing(uint8_t* buf, uint16_t len)
     ProtocolItem.dataLen=buf[7]+buf[8]*256;
     ProtocolItem.data=&buf[9];
     ProtocolItem.SaveEn=false;
-
-
 
     if(ProtocolItem.cmd == CMD_WriteAllJointStatus )
     {
@@ -366,14 +337,6 @@ void ProtocolProcessing(uint8_t* buf, uint16_t len)
             ProtocolItem.SaveEn = true;
         }
 
-        if(rx.angle!=local.angle)
-        {
-            electron.joint[idbuf].angle=rx.angle;
-            // ProtocolItem.SaveEn = true;
-            electron.UpdateJointAngle(electron.joint[idbuf], rx.angle);
-            HAL_Delay(20);
-        }
-
         if(rx.modelAngelMin!=local.modelAngelMin)
         {
             electron.joint[idbuf].modelAngelMin=rx.modelAngelMin;
@@ -388,68 +351,79 @@ void ProtocolProcessing(uint8_t* buf, uint16_t len)
             ProtocolItem.SaveEn = true;
         }
 
-        if(rx.inverted!=local.inverted)
-        {
-            electron.joint[idbuf].inverted=rx.inverted;
-            local.inverted=rx.inverted;
-            ProtocolItem.SaveEn = true;
-        }
-
-        if(rx.initAngle!=local.initAngle)
-        {
-            electron.SetJointInitAngle(electron.joint[idbuf], rx.initAngle);
-            HAL_Delay(20);
-            local.initAngle=rx.initAngle;
-            ProtocolItem.SaveEn = true;
-        }
-
         if(rx.torqueLimit!=local.torqueLimit)
         {
-            electron.SetJointTorqueLimit(electron.joint[idbuf], rx.torqueLimit);
-            HAL_Delay(20);
+           // electron.SetJointTorqueLimit(electron.joint[idbuf], rx.torqueLimit);
+           // HAL_Delay(20);
             local.torqueLimit=rx.torqueLimit;
             ProtocolItem.SaveEn = true;
         }
 
         if(rx.kp!=local.kp)
         {
-            electron.SetJointKp(electron.joint[idbuf],rx.kp);
-            HAL_Delay(20);
+           // electron.SetJointKp(electron.joint[idbuf],rx.kp);
+            //HAL_Delay(20);
             local.kp=rx.kp;
+            ProtocolItem.SaveEn = true;
+        }
+
+       /*
+        *
+        *
+        * if(rx.angle!=local.angle)//屏蔽暂时不用的部分
+        {
+            electron.joint[idbuf].angle=rx.angle;
+            ProtocolItem.SaveEn = true;
+            //  electron.UpdateJointAngle(electron.joint[idbuf], rx.angle);
+            HAL_Delay(20);
+        }
+
+        if(rx.initAngle!=local.initAngle)
+        {
+           // electron.SetJointInitAngle(electron.joint[idbuf], rx.initAngle);
+            HAL_Delay(20);
+            local.initAngle=rx.initAngle;
             ProtocolItem.SaveEn = true;
         }
 
         if(rx.ki!=local.ki)
         {
-            electron.SetJointKi(electron.joint[idbuf],rx.ki);
-            HAL_Delay(20);
+           // electron.SetJointKi(electron.joint[idbuf],rx.ki);
+           // HAL_Delay(20);
             local.ki=rx.kp;
             ProtocolItem.SaveEn = true;
         }
 
         if(rx.kv!=local.kv)
         {
-            electron.SetJointKv(electron.joint[idbuf],rx.kv);
-            HAL_Delay(20);
+           // electron.SetJointKv(electron.joint[idbuf],rx.kv);
+           // HAL_Delay(20);
             local.kv=rx.kv;
             ProtocolItem.SaveEn = true;
         }
 
         if(rx.kd!=local.kd)
         {
-            electron.SetJointKd(electron.joint[idbuf],rx.kd);
-            HAL_Delay(20);
+           // electron.SetJointKd(electron.joint[idbuf],rx.kd);
+           // HAL_Delay(20);
             local.kd=rx.kd;
             ProtocolItem.SaveEn = true;
         }
 
         if(rx.enable!=local.enable)
         {
-            electron.SetJointEnable(electron.joint[idbuf],rx.enable);
-            HAL_Delay(20);
+           // electron.SetJointEnable(electron.joint[idbuf],rx.enable);
+          //  HAL_Delay(20);
             local.enable=rx.enable;
             ProtocolItem.SaveEn = true;
         }
+
+        if(rx.inverted!=local.inverted)
+        {
+            // electron.joint[idbuf].inverted=rx.inverted;
+            local.inverted=rx.inverted;
+            ProtocolItem.SaveEn = true;
+        }*/
 
         flashSave_t *P2;
         if(ProtocolItem.SaveEn == true)
@@ -546,7 +520,7 @@ void ProtocolProcessing(uint8_t* buf, uint16_t len)
         HAL_Delay(20);
        // xMutex_Uart1 =xSemaphoreCreateMutex( );
         //xSemaphoreTake(xMutex_Uart1, portMAX_DELAY);
-        HAL_UART_Transmit(&huart1 , (uint8_t *)&txbuf.buf, txbuf.dataLen, 0x20);
+        HAL_UART_Transmit(&huart1 , (uint8_t *)&txbuf.buf, txbuf.dataLen, 0xFFFF);
        // xSemaphoreGive(xMutex_Uart1);
     }
 
@@ -567,8 +541,6 @@ void ProtocolProcessing(uint8_t* buf, uint16_t len)
         __disable_irq();
         HAL_NVIC_SystemReset();
     }
-
-
     BufClear((uint8_t* )&rxbuf,0,sizeof(rxbuf));
 }
 
@@ -634,35 +606,40 @@ void JointStatusUpdata(void)
 
 void PrintfElectronBotJointStatus(ElectronBotJointStatus_t * Status,uint8_t id)
 {
-
+    HAL_Delay(40);
     myPrintf("*******joint%dStatus******\r\n",id);
-   // HAL_Delay(100);
+
     myPrintf("angleMin=%f\r\n", Status->angleMin);
-   // HAL_Delay(100);
+
     myPrintf("angleMax=%f\r\n", Status->angleMax);
-   // HAL_Delay(100);
-    myPrintf("angle=%f\r\n", Status->angle);
-   // HAL_Delay(100);
+
     myPrintf("modelAngelMin=%f\r\n", Status->modelAngelMin);
-   // HAL_Delay(100);
+
     myPrintf("modelAngelMax=%f\r\n", Status->modelAngelMax);
-   // HAL_Delay(100);
-    myPrintf("inverted=%s\r\n", Status->inverted ? "true" : "false");
-   // HAL_Delay(100);
-    myPrintf("initAngle=%f\r\n", Status->initAngle);
-   // HAL_Delay(100);
+
     myPrintf("torqueLimit=%f\r\n", Status->torqueLimit);
-   // HAL_Delay(100);
+
     myPrintf("kp=%f\r\n", Status->kp);
-   // HAL_Delay(100);
+
+    HAL_Delay(40);
+
+    /*myPrintf("\r\n");
+
+
+    myPrintf("initAngle=%f\r\n", Status->initAngle);
+
+    myPrintf("angle=%f\r\n", Status->angle);
+
     myPrintf("ki=%f\r\n", Status->ki);
-   // HAL_Delay(100);
+
     myPrintf("kv=%f\r\n", Status->kv);
-   // HAL_Delay(100);
+
     myPrintf("kd=%f\r\n", Status->kd);
-   // HAL_Delay(100);
+
     myPrintf("enable=%s\r\n", Status->enable ? "true" : "false");
-   // HAL_Delay(100);
+
+    myPrintf("inverted=%s\r\n", Status->inverted ? "true" : "false");*/
+
 }
 
 void JointStatusUpdata(void)
@@ -701,6 +678,7 @@ void JointStatusUpdata(void)
             PrintfElectronBotJointStatus(&flashSave.ElectronBotjoint[i],i*2);
 
             electron.UpdateJointAngle(electron.joint[i], 0);
+            HAL_Delay(50);
 
             /*HAL_Delay(50);
             electron.SetJointInitAngle(electron.joint[i], flashSaved.initAngle);
@@ -734,12 +712,6 @@ void JointStatusUpdata(void)
             electron.UpdateJointAngle(electron.joint[i], 0);
             HAL_Delay(50);
 
-            if (flashSaved.initAngle != 0)
-            {
-                electron.SetJointInitAngle(electron.joint[i], flashSaved.initAngle);
-                HAL_Delay(50);
-            }
-
             if (flashSaved.torqueLimit != 0.5)
             {
                 electron.SetJointTorqueLimit(electron.joint[i], flashSaved.torqueLimit);
@@ -751,7 +723,16 @@ void JointStatusUpdata(void)
                 HAL_Delay(50);
             }
 
-            if (flashSaved.ki != 0) {
+           /*
+            *
+            *
+            *
+            * if (flashSaved.initAngle != 0)
+            {
+               // electron.SetJointInitAngle(electron.joint[i], flashSaved.initAngle);
+                HAL_Delay(50);
+            }
+             if (flashSaved.ki != 0) {
                 electron.SetJointKi(electron.joint[i], flashSaved.ki);
                 HAL_Delay(50);
             }
@@ -765,7 +746,7 @@ void JointStatusUpdata(void)
             {
                 electron.SetJointKd(electron.joint[i], flashSaved.kd);
                 HAL_Delay(50);
-            }
+            }*/
             //electron.SetJointEnable(electron.joint[i], flashSaved.kd);
         }
     }

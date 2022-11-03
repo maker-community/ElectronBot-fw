@@ -118,14 +118,14 @@ struct ProtocolItem_t {
 
 struct txbuf_t {
     uint16_t dataLen;
-    uint8_t buf[300];
+    uint8_t buf[600];
 };
 //txbuf_t txbuf;
 
 struct rxbuf_t {
     uint16_t dataLen;
     uint8_t* frameHead;
-    uint8_t buf[300];
+    uint8_t buf[600];
 };
 //rxbuf_t rxbuf;
 
@@ -174,6 +174,6 @@ void PAJ7620_ConnectionStatusChange(bool ConnectionStatus);
 bool PAJ7620_ConnectionStatusIs();
 void PAJ7620_InitStatusChange(bool InitStatus);
 bool PAJ7620_InitStatusIs();
-
+void PrintfElectronBotJointStatus(ElectronBotJointStatus_t * Status,uint8_t id);
 
 #endif //PROTOCOL_H
