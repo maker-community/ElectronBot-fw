@@ -3,7 +3,7 @@ QT       += core gui
 QT       += printsupport
 QT       += network
 
-VERSION = 1.0.0.0
+VERSION = 1.1.0.0
 QT += serialport
 //QT       += core gui serialport
 //QT += QDateTime

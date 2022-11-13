@@ -51,6 +51,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     connect(&m_pTimer, SIGNAL(timeout()), this, SLOT(handleTimeout()));
 
+
+    fileInit();
+
      m_pTimer.start(TimerCell);
 
     UpdateRobotSlavesConnectionStatus();
@@ -1594,9 +1597,15 @@ void MainWindow::on_writeJointStatus_2_clicked()
     //   qDebug() << QCoreApplication::applicationDirPath();
    // }
 
-
-    settings = new QSettings("defaultJointStauts.ini",QSettings::IniFormat);
-
+    QString sub;
+    QString  source=QCoreApplication::applicationDirPath();
+    sub="JointStauts-ini";
+    source={source+"/"+sub+"/"};
+    sub="defaultJointStauts.ini";
+    //source={source+"/"+sub+"/"};
+    source={source+sub};
+   // settings = new QSettings("defaultJointStauts.ini",QSettings::IniFormat);
+     settings = new QSettings(source,QSettings::IniFormat);
 
        //通过setValue函数将键值对放在相对于的节下面
        // 格式： settings->setValue("节名/键名","键值");
@@ -1731,7 +1740,7 @@ void MainWindow::on_appBt_clicked()
 {
     QString path = QFileDialog::getOpenFileName(this,
         tr("Open File"),//控件的objectName
-         ".",           //对话框显示时默认打开的目录，"." 代表程序运行目录
+         QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),           //对话框显示时默认打开的目录，"." 代表程序运行目录
         tr("Text Files(*.bin)"));   //对话框的后缀名过滤器，将txt文件改为bin文件。
     if(!path.isEmpty()) {
         QFile file(path);
@@ -1848,9 +1857,12 @@ void MainWindow::timeoutSlot()
 
 void MainWindow::on_iniBt_clicked()
 {
+
+
     QString path = QFileDialog::getOpenFileName(this,
         tr("Open File"),//控件的objectName
-         ".",           //对话框显示时默认打开的目录，"." 代表程序运行目录
+ //        ".",           //对话框显示时默认打开的目录，"." 代表程序运行目录
+    QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),           //对话框显示时默认打开的目录，"." 代表程序运行目录
         tr("Text Files(*.ini)"));   //对话框的后缀名过滤器，将txt文件改为bin文件。
     if(!path.isEmpty()) {
         QFile file(path);
@@ -2365,75 +2377,9 @@ void MainWindow::on_editURL_textChanged(const QString &arg1)
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    //QString textfile=QFileDialog::getOpenFileName(this,tr("文件"),addrStr,tr("text(*.txt)"));
-   // QFile file("https://gitee.com/xiao-xiaoming95/election-bot-firmware/blob/master/ElectronBot-fw/app/bin/setting.ini");
-   // file.open(QIODevice::ReadOnly|QIODevice::Text);
-   // printfLog(file.readAll());
-
-   // QDesktopServices::openUrl(QUrl("https://gitee.com/xiao-xiaoming95/election-bot-firmware/blob/master/ElectronBot-fw/app/bin/setting.ini", QUrl::TolerantMode));
-
-  //QString runPath = QCoreApplication::applicationDirPath();
-    //QUrl file_name = QFileDialog::getOpenFileUrl(this,QStringLiteral("选择路径"),runPath,"Text Files(*.txt *.png)",nullptr,QFileDialog::DontUseCustomDirectoryIcons);
-  //  QUrl file_name = QFileDialog::getOpenFileUrl(this,"https://gitee.com/xiao-xiaoming95/election-bot-firmware/blob/master/ElectronBot-fw/app/bin/setting.ini",runPath,"Text Files(*.txt *.png)",nullptr,QFileDialog::DontUseCustomDirectoryIcons);
-
-
-
-    //QFile readfile(ui->apppathEdit->text());    //要读取的bin文件
-
-    /*QFile readfile(ui->apppathEdit->text());    //要读取的bin文件
-    QFileInfo read_file_info(readfile);         //要读取的bin文件的信息
-    if (!readfile.open(QIODevice::ReadOnly)) {  //只读方式打开bin文件
-        QMessageBox::warning(this, tr("Read File"),
-            tr("Cannot open file:\n%1").arg(ui->apppathEdit->text()));
-        return;
-    }
-    QDataStream BinFileData(&readfile);  //将刚刚创建的 file 对象的指针传递给一个QDataStream实例 BinFileData
-    char *pBuff = new char[1024*1024];    //修改为1M大小，以便读取APP.bin时复用。修改为动态分配？
-    BinFileData.readRawData(pBuff,static_cast<int>(read_file_info.size()));//要读取bin文件的大小
-    qDebug() << "IAP.bin size is " << static_cast<int>(read_file_info.size());    //打印文件长度
-
-    IAP_DataAllArray.clear();
-    IAP_DataAllArray = QByteArray(pBuff,static_cast<int>(read_file_info.size()));
-
-    QString recvText;
-    recvText = byteArray2Text(IAP_DataAllArray);
-    ui->serialPortLogEdit->appendPlainText(recvText);
-
-    QByteArray sendData;
-    uint8_t testBuf[1024]={0};
-    for(uint16_t i=0;i<1024;i++)
-    {
-        testBuf[i]=i;
-    }
-
-    iap.codeLen=read_file_info.size();
-    IAP_init();
-
-   // sendData=IAP();
-   // sendData=QByteArray((char*)testBuf,1024);
-   // recvText = byteArray2Text(sendData);
-   // ui->serialPortLogEdit->appendPlainText(recvText);
-
-    //serialPort->write(sendData.data(),sendData.length());
-   // serialPort->write(sendData.data(),128);
-
-   // timer->start(1000);
-
-    readfile.close();*/
-
-
-   /* QString urlSpec = ui->editURL->text().trimmed();
-    if (urlSpec.isEmpty())
-    {
-        QMessageBox::information(this, "错误",
-          "请指定需要下载的URL");
-        return;
-    }*/
     QString urlSpec;
-   // urlSpec.sprintf("https://gitee.com/xiao-xiaoming95/election-bot-firmware/raw/master/ElectronBot-fw/app/bin/setting.ini");
 
     urlSpec.sprintf("https://gitee.com/xiao-xiaoming95/election-bot-firmware/raw/master/ElectronBot-fw/app/bin/app.bin");
-    //urlSpec.sprintf("https://github.com/maker-community/ElectronBot-fw/raw/master/Release/ElectionBot-fw/app.bin");
 
     if(ui->useCustomWebAddressRb->isChecked())
     {
@@ -2449,17 +2395,16 @@ void MainWindow::on_pushButton_2_clicked()
     }
 
 
-    QString  curPath=QDir::currentPath();
+    //QString  curPath=QDir::currentPath();
+    QString  curPath=QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    //QString  curPath=QCoreApplication::applicationDirPath();
+   // printfLog(curPath);
     QDir    dir(curPath);
 
     QString  sub="temp";
-    dir.mkdir(sub);
-
-    //ui->editPath->setText(curPath+"/"+sub+"/");
-
-    //QString tempDir =ui->editPath->text().trimmed();//临时目录
 
     QString tempDir ={curPath+"/"+sub+"/"};//临时目录
+    dir.mkdir(tempDir);
     if (tempDir.isEmpty())
     {
         QMessageBox::information(this, tr("错误"), "请指定保存下载文件的目录");
@@ -2477,8 +2422,6 @@ void MainWindow::on_pushButton_2_clicked()
         QMessageBox::information(this, tr("错误"),"临时文件打开错误");
         return;
     }
-
-
 
 //发送玩过请求，创建网络响应
     reply = networkManager.get(QNetworkRequest(newUrl));
@@ -2719,4 +2662,129 @@ void MainWindow::cleanJointStatusCb(void)
 
     ui->mpu6050Cb->setChecked(false);
     ui->paj7620Cb->setChecked(false);
+}
+
+
+//srcPath源文件文件路径，dstPath目的文件路径，coverFileIfExist文件存在是否覆盖
+bool copyFile(QString srcPath, QString dstPath, bool coverFileIfExist)
+{
+    srcPath.replace("\\", "/");
+    dstPath.replace("\\", "/");
+    if (srcPath == dstPath) {
+        return true;
+    }
+
+    if (!QFile::exists(srcPath)) {  //源文件不存在
+        return false;
+    }
+
+    if (QFile::exists(dstPath)) {
+        if (coverFileIfExist) {
+            QFile::remove(dstPath);
+        }
+    }
+
+    if (!QFile::copy(srcPath, dstPath)){
+        return false;
+    }
+    return true;
+}
+
+
+//source源文件目录路径，destination目的文件目录，override文件存在是否覆盖
+bool copyDir(const QString &source,const QString &destination, bool override)
+{
+    QDir directory(source);
+    if (!directory.exists())
+    {
+        qDebug()<<"不存在";
+        return false;
+    }
+
+
+    QString srcPath = QDir::toNativeSeparators(source);
+    if (!srcPath.endsWith(QDir::separator()))
+        srcPath += QDir::separator();
+    QString dstPath = QDir::toNativeSeparators(destination);
+    if (!dstPath.endsWith(QDir::separator()))
+        dstPath += QDir::separator();
+
+
+    bool error = false;
+    QStringList fileNames = directory.entryList(QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden);
+    for (QStringList::size_type i=0; i != fileNames.size(); ++i)
+    {
+        QString fileName = fileNames.at(i);
+        QString srcFilePath = srcPath + fileName;
+        QString dstFilePath = dstPath + fileName;
+        QFileInfo fileInfo(srcFilePath);
+        if (fileInfo.isFile() || fileInfo.isSymLink())
+        {
+            if (override)
+            {
+                QFile::setPermissions(dstFilePath, QFile::WriteOwner);
+            }
+            QFile::copy(srcFilePath, dstFilePath);
+        }
+        else if (fileInfo.isDir())
+        {
+            QDir dstDir(dstFilePath);
+            dstDir.mkpath(dstFilePath);
+            if (!copyDir(srcFilePath, dstFilePath, override))
+            {
+                error = true;
+            }
+        }
+    }
+    return !error;
+}
+
+
+void MainWindow::fileInit(void)
+{
+    printfLog("init file");
+    QString  curPath=QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    //QString  curPath=QCoreApplication::applicationDirPath();
+   // printfLog(curPath);
+    printfLog("Path:  "+curPath);
+    QDir    dir(curPath);
+
+    QString  sub;
+    dir.mkdir(curPath);
+
+    QString tempDir ={curPath+"/"};//临时目录
+    if (tempDir.isEmpty())
+    {
+        QMessageBox::information(this, tr("错误"), "请指定保存下载文件的目录");
+        return;
+    }
+
+    QString  source=QCoreApplication::applicationDirPath();
+    sub="ElectionBot-fw";
+    source={source+"/"+sub+"/"};
+
+    QString  destination = tempDir;
+    destination={destination+"/"+sub+"/"};
+    dir.mkdir(sub);
+    copyDir(source,destination,true);
+
+
+    source=QCoreApplication::applicationDirPath();
+    sub="ElectionBot-IAP";
+    source={source+"/"+sub+"/"};
+
+    destination = tempDir;
+    destination={destination+"/"+sub+"/"};
+    dir.mkdir(sub);
+    copyDir(source,destination,true);
+
+    source=QCoreApplication::applicationDirPath();
+    sub="JointStauts-ini";
+    source={source+"/"+sub+"/"};
+
+    destination = tempDir;
+    destination={destination+"/"+sub+"/"};
+    dir.mkdir(sub);
+    copyDir(source,destination,true);
+
 }

@@ -192,6 +192,7 @@ private:
     void myPrintf(const char* format, ...);
     void showBinFileInfo();
     void cleanJointStatusCb(void);
+    void fileInit(void);
 };
 
 #endif // MAINWINDOW_H
