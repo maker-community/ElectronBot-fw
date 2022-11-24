@@ -164,7 +164,7 @@ void jumpToApp()
 
 
 uint32_t timeCounter=0;
-char VERSION[]={"1.0.0.0"};
+char VERSION[]={"1.1.0.0"};//char VERSION[]={"1.0.0.0"};
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -210,7 +210,7 @@ int main(void)
 
     HAL_Delay(1000);
     myPrintf("------------------------------------ \r\n");
-    myPrintf("ElectionBot-IAP \r\n");
+    myPrintf("ElectronBot-IAP \r\n");
     myPrintf("version is %s\r\n",VERSION);
     myPrintf("------------------------------------ \r\n");
     //myPrintf("IAP program is running \r\n");
