@@ -164,7 +164,7 @@ void jumpToApp()
 
 
 uint32_t timeCounter=0;
-char VERSION[]={"1.1.0.0"};//char VERSION[]={"1.0.0.0"};
+char VERSION[]={"1.0.1.0"};//char VERSION[]={"1.0.0.0"};
 int main(void)
 {
   /* USER CODE BEGIN 1 */
