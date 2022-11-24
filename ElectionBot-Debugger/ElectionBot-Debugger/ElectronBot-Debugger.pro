@@ -3,7 +3,7 @@ QT       += core gui
 QT       += printsupport
 QT       += network
 
-VERSION = 1.1.0.0
+VERSION = 1.1.1.0
 QT += serialport
 //QT       += core gui serialport
 //QT += QDateTime
@@ -11,7 +11,7 @@ QT += serialport
 //CONFIG += c++11
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = ElectionBot-Debugger
+TARGET = ElectronBot-Debugger
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use

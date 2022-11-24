@@ -450,7 +450,7 @@ QByteArray MainWindow::writeBinPacketToProtocolBuf(QByteArray BinPacketData)
     str.sprintf("writeBinPacketToProtocolBuf");
     printfDbugLog(QString(str));
 
-    str = ui->electionBotIdEdit->text();
+    str = ui->ElectronBotIdEdit->text();
     ProtocolItem.ElectronBotID = str.toInt();
     str.sprintf("ElectronBotID=%d",ProtocolItem.ElectronBotID);
     printfDbugLog(QString(str));
@@ -461,7 +461,7 @@ QByteArray MainWindow::writeBinPacketToProtocolBuf(QByteArray BinPacketData)
     printfDbugLog(QString(str));
 
      //int a=33;
-     //ui->electionBotIdEdit->setText(testprintf.number(a,10));
+     //ui->ElectronBotIdEdit->setText(testprintf.number(a,10));
     // str = ui->jointIdCb->currentText();
     // ProtocolItem.jointID = str.toInt();
 
@@ -993,7 +993,7 @@ QByteArray MainWindow::writeJointStatusToBuf(void)
     testprintf.sprintf("writeJointStatus");
     printfLog(QString(testprintf));
 
-    QString str = ui->electionBotIdEdit->text();
+    QString str = ui->ElectronBotIdEdit->text();
     ProtocolItem.ElectronBotID = str.toInt();
     str.sprintf("ElectronBotID=%d",ProtocolItem.ElectronBotID);
     printfLog(QString(str));
@@ -1004,7 +1004,7 @@ QByteArray MainWindow::writeJointStatusToBuf(void)
     printfLog(QString(str));
 
      //int a=33;
-     //ui->electionBotIdEdit->setText(testprintf.number(a,10));
+     //ui->ElectronBotIdEdit->setText(testprintf.number(a,10));
     // str = ui->jointIdCb->currentText();
     // ProtocolItem.jointID = str.toInt();
 
@@ -1396,7 +1396,7 @@ void MainWindow::on_clearBt_clicked()
 void MainWindow::on_writeJointIdBt_clicked()
 {
     uint8_t NewJointId=2;
-    QString str = ui->electionBotIdEdit->text();
+    QString str = ui->ElectronBotIdEdit->text();
     ProtocolItem.ElectronBotID = str.toInt();
     str.sprintf("ElectronBotID=%d",ProtocolItem.ElectronBotID);
     printfLog(QString(str));
@@ -1407,7 +1407,7 @@ void MainWindow::on_writeJointIdBt_clicked()
     printfLog(QString(str));
 
      //int a=33;
-     //ui->electionBotIdEdit->setText(testprintf.number(a,10));
+     //ui->ElectronBotIdEdit->setText(testprintf.number(a,10));
     // str = ui->jointIdCb->currentText();
     // ProtocolItem.jointID = str.toInt();
 
@@ -1441,7 +1441,7 @@ struct RotationTestAngle_t
 
 void MainWindow::on_jointRotationTestBt_clicked()
 {
-    QString str = ui->electionBotIdEdit->text();
+    QString str = ui->ElectronBotIdEdit->text();
     ProtocolItem.ElectronBotID = str.toInt();
     str.sprintf("ElectronBotID=%d",ProtocolItem.ElectronBotID);
     printfLog(QString(str));
@@ -1458,7 +1458,7 @@ void MainWindow::on_jointRotationTestBt_clicked()
    // str.sprintf("kp=%lf",JointStatus.kp);
    // printfLog(QString(str));
      //int a=33;
-     //ui->electionBotIdEdit->setText(testprintf.number(a,10));
+     //ui->ElectronBotIdEdit->setText(testprintf.number(a,10));
     // str = ui->jointIdCb->currentText();
     // ProtocolItem.jointID = str.toInt();
 
@@ -1478,7 +1478,7 @@ void MainWindow::on_jointRotationTestBt_clicked()
 
 void MainWindow::on_jointRotationTestCloseBt_clicked()
 {
-    QString str = ui->electionBotIdEdit->text();
+    QString str = ui->ElectronBotIdEdit->text();
     ProtocolItem.ElectronBotID = str.toInt();
     str.sprintf("ElectronBotID=%d",ProtocolItem.ElectronBotID);
     printfLog(QString(str));
@@ -1493,7 +1493,7 @@ void MainWindow::on_jointRotationTestCloseBt_clicked()
    // str.sprintf("kp=%lf",JointStatus.kp);
    // printfLog(QString(str));
      //int a=33;
-     //ui->electionBotIdEdit->setText(testprintf.number(a,10));
+     //ui->ElectronBotIdEdit->setText(testprintf.number(a,10));
     // str = ui->jointIdCb->currentText();
     // ProtocolItem.jointID = str.toInt();
 
@@ -1514,7 +1514,7 @@ void MainWindow::on_jointRotationTestCloseBt_clicked()
 void MainWindow::on_resetMasterBt_clicked()
 {
     cleanJointStatusCb();
-    QString str = ui->electionBotIdEdit->text();
+    QString str = ui->ElectronBotIdEdit->text();
     ProtocolItem.ElectronBotID = str.toInt();
     str.sprintf("ElectronBotID=%d",ProtocolItem.ElectronBotID);
     printfLog(QString(str));
@@ -1525,7 +1525,7 @@ void MainWindow::on_resetMasterBt_clicked()
     printfLog(QString(str));
 
      //int a=33;
-     //ui->electionBotIdEdit->setText(testprintf.number(a,10));
+     //ui->ElectronBotIdEdit->setText(testprintf.number(a,10));
     // str = ui->jointIdCb->currentText();
     // ProtocolItem.jointID = str.toInt();
 
@@ -1546,10 +1546,10 @@ void MainWindow::on_resetMasterBt_clicked()
 }
 
 
-void MainWindow::on_writeElectionBotIdBt_clicked()
+void MainWindow::on_writeElectronBotIdBt_clicked()
 {
     uint32_t NewElectronBotID=0;
-    QString str = ui->electionBotIdEdit->text();
+    QString str = ui->ElectronBotIdEdit->text();
     ProtocolItem.ElectronBotID = str.toInt();
     str.sprintf("ElectronBotID=%d",ProtocolItem.ElectronBotID);
     printfLog(QString(str));
@@ -1560,12 +1560,12 @@ void MainWindow::on_writeElectionBotIdBt_clicked()
     printfLog(QString(str));
 
      //int a=33;
-     //ui->electionBotIdEdit->setText(testprintf.number(a,10));
+     //ui->ElectronBotIdEdit->setText(testprintf.number(a,10));
     // str = ui->jointIdCb->currentText();
     // ProtocolItem.jointID = str.toInt();
 
 
-    str=ui->writeElectionBotIdEdit->text();
+    str=ui->writeElectronBotIdEdit->text();
     NewElectronBotID = str.toInt();
     str.sprintf("NewElectronBotID=%d",NewElectronBotID);
     printfLog(QString(str));
@@ -1740,7 +1740,7 @@ void MainWindow::on_appBt_clicked()
 {
     QString path = QFileDialog::getOpenFileName(this,
         tr("Open File"),//控件的objectName
-         QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),           //对话框显示时默认打开的目录，"." 代表程序运行目录
+         getUserfilePath(),           //对话框显示时默认打开的目录，"." 代表程序运行目录
         tr("Text Files(*.bin)"));   //对话框的后缀名过滤器，将txt文件改为bin文件。
     if(!path.isEmpty()) {
         QFile file(path);
@@ -1862,7 +1862,7 @@ void MainWindow::on_iniBt_clicked()
     QString path = QFileDialog::getOpenFileName(this,
         tr("Open File"),//控件的objectName
  //        ".",           //对话框显示时默认打开的目录，"." 代表程序运行目录
-    QStandardPaths::writableLocation(QStandardPaths::AppDataLocation),           //对话框显示时默认打开的目录，"." 代表程序运行目录
+    getUserfilePath(),           //对话框显示时默认打开的目录，"." 代表程序运行目录
         tr("Text Files(*.ini)"));   //对话框的后缀名过滤器，将txt文件改为bin文件。
     if(!path.isEmpty()) {
         QFile file(path);
@@ -2396,7 +2396,7 @@ void MainWindow::on_pushButton_2_clicked()
 
 
     //QString  curPath=QDir::currentPath();
-    QString  curPath=QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QString  curPath=getUserfilePath();
     //QString  curPath=QCoreApplication::applicationDirPath();
    // printfLog(curPath);
     QDir    dir(curPath);
@@ -2739,14 +2739,26 @@ bool copyDir(const QString &source,const QString &destination, bool override)
     return !error;
 }
 
+QString MainWindow::getUserfilePath(void)
+{
+    QString curPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
+    curPath={curPath+"/"+"ElectronBot-Debugger"+"/"};
+    return curPath;
+}
 
 void MainWindow::fileInit(void)
 {
     printfLog("init file");
-    QString  curPath=QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+   // QString  curPath=QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    // QString curPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+
+    // QString curPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
     //QString  curPath=QCoreApplication::applicationDirPath();
    // printfLog(curPath);
-    printfLog("Path:  "+curPath);
+   // curPath={curPath+"/"+"ElectronBot-Debugger"+"/"};
+
+    QString curPath=getUserfilePath();
+    printfLog("Path:  \r\n"+curPath);
     QDir    dir(curPath);
 
     QString  sub;
@@ -2760,7 +2772,7 @@ void MainWindow::fileInit(void)
     }
 
     QString  source=QCoreApplication::applicationDirPath();
-    sub="ElectionBot-fw";
+    sub="ElectronBot-fw";
     source={source+"/"+sub+"/"};
 
     QString  destination = tempDir;
@@ -2770,7 +2782,7 @@ void MainWindow::fileInit(void)
 
 
     source=QCoreApplication::applicationDirPath();
-    sub="ElectionBot-IAP";
+    sub="ElectronBot-IAP";
     source={source+"/"+sub+"/"};
 
     destination = tempDir;

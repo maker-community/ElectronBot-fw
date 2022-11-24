@@ -103,7 +103,7 @@ private slots:
 
     void on_writeJointIdBt_clicked();
 
-    void on_writeElectionBotIdBt_clicked();
+    void on_writeElectronBotIdBt_clicked();
 
     void on_writeJointStatus_2_clicked();
 
@@ -193,6 +193,7 @@ private:
     void showBinFileInfo();
     void cleanJointStatusCb(void);
     void fileInit(void);
+    QString getUserfilePath(void);
 };
 
 #endif // MAINWINDOW_H

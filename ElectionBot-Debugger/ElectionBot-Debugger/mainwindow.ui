@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>ElectionBot-Debugger</string>
+   <string>ElectronBot-Debugger</string>
   </property>
   <property name="toolTipDuration">
    <number>-1</number>
@@ -385,7 +385,7 @@
      <rect>
       <x>490</x>
       <y>130</y>
-      <width>321</width>
+      <width>331</width>
       <height>561</height>
      </rect>
     </property>
@@ -459,7 +459,7 @@
       </property>
      </item>
     </widget>
-    <widget class="QLineEdit" name="writeElectionBotIdEdit">
+    <widget class="QLineEdit" name="writeElectronBotIdEdit">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -493,15 +493,15 @@
       <rect>
        <x>140</x>
        <y>90</y>
-       <width>111</width>
+       <width>151</width>
        <height>23</height>
       </rect>
      </property>
      <property name="text">
-      <string>写舵机新ID到主控</string>
+      <string>写舵机新ID到舵机驱动板</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="electionBotIdEdit">
+    <widget class="QLineEdit" name="ElectronBotIdEdit">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -520,7 +520,7 @@
       <string>0</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="writeElectionBotIdBt">
+    <widget class="QPushButton" name="writeElectronBotIdBt">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -703,22 +703,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="invertedCb">
-        <property name="text">
-         <string>inverted</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
-        </property>
-        <property name="tristate">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="2" rowspan="2">
        <widget class="QDoubleSpinBox" name="kdDsb">
         <property name="decimals">
@@ -746,6 +730,22 @@
        <widget class="QCheckBox" name="enableCb">
         <property name="text">
          <string>enable</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="QCheckBox" name="invertedCb">
+        <property name="text">
+         <string>inverted</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+        <property name="tristate">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -1063,12 +1063,12 @@
       <rect>
        <x>140</x>
        <y>150</y>
-       <width>141</width>
+       <width>181</width>
        <height>23</height>
       </rect>
      </property>
      <property name="text">
-      <string>导入配置文件参数到面板</string>
+      <string>导入自定义配置文件参数到面板</string>
      </property>
     </widget>
    </widget>
