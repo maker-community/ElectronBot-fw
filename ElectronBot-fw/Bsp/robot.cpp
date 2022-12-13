@@ -64,9 +64,15 @@ void Robot::UpdateServoAngle(Robot::JointStatus_t &_joint, float _angleSetPoint)
         for (int i = 0; i < 4; i++)
             i2cTxData[i + 1] = *(b + i);
 
-        TransmitAndReceiveI2cPacket(_joint.id);
-
-        _joint.angle = *(float*) (i2cRxData + 1);
+        if(TransmitAndReceiveI2cPacket(_joint.id)==true)
+        {
+            _joint.angle = *(float *) (i2cRxData + 1);
+        }
+        else
+        {
+            _joint.angle =0;
+            //_joint.angle = *(float *) (i2cRxData + 1);
+        }
     }
 }
 
@@ -103,7 +109,8 @@ extern bool iic_lock;
 //bool gesture_iic_lock = false;
 extern SemaphoreHandle_t xMutex;
 extern bool iicFailPrintfEn;
-void Robot::TransmitAndReceiveI2cPacket(uint8_t _id)
+//void Robot::TransmitAndReceiveI2cPacket(uint8_t _id)
+bool Robot::TransmitAndReceiveI2cPacket(uint8_t _id)
 {
     HAL_StatusTypeDef state = HAL_ERROR;
     int iicreTry=2;
@@ -131,6 +138,8 @@ void Robot::TransmitAndReceiveI2cPacket(uint8_t _id)
             myPrintf("iic write joint%d fail\r\n",_id);
             HAL_Delay(20);
         }
+        xSemaphoreGive(xMutex);
+        return false;
     }
     state = HAL_ERROR;
     do
@@ -152,9 +161,12 @@ void Robot::TransmitAndReceiveI2cPacket(uint8_t _id)
            myPrintf("iic read joint%d fail\r\n",_id);
            HAL_Delay(20);
        }
+       xSemaphoreGive(xMutex);
+       return false;
    }
 
     xSemaphoreGive(xMutex);
+    return true;
 }
 
 

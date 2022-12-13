@@ -72,6 +72,59 @@ void MX_FREERTOS_Init(void);
   * @retval int
   */
 
+TIM_HandleTypeDef htim2;
+static void MX_GPIO_Init1(void);
+static void MX_TIM2_Init(void);
+
+
+static void MX_TIM2_Init(void)
+{
+
+    /* USER CODE BEGIN TIM2_Init 0 */
+
+    /* USER CODE END TIM2_Init 0 */
+
+    TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+    TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+    /* USER CODE BEGIN TIM2_Init 1 */
+
+    /* USER CODE END TIM2_Init 1 */
+    htim2.Instance = TIM2;
+    htim2.Init.Prescaler = 8399;
+    htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+    //htim2.Init.Period = 10000;
+    htim2.Init.Period = 10;
+    htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+    // htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+    htim2.Init.AutoReloadPreload =  TIM_AUTORELOAD_PRELOAD_ENABLE;
+    if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+    {
+        Error_Handler();
+    }
+    sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+    if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+    {
+        Error_Handler();
+    }
+    sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+    sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+    if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+    {
+        Error_Handler();
+    }
+    /* USER CODE BEGIN TIM2_Init 2 */
+
+    /* USER CODE END TIM2_Init 2 */
+
+}
+
+static void MX_GPIO_Init1(void)
+{
+
+    /* GPIO Ports Clock Enable */
+    __HAL_RCC_GPIOH_CLK_ENABLE();
+}
 
 int main(void)
 {
@@ -82,21 +135,23 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-   // SCB->VTOR = FLASH_BASE ;
+   SCB->VTOR = FLASH_BASE ;
 
-    SCB->VTOR = FLASH_BASE | 0x10000;
-    __set_FAULTMASK(0);
+  //  SCB->VTOR = FLASH_BASE | 0x10000;
+  //  __set_FAULTMASK(0);
+
     //__HAL_UART_CLEAR_IDLEFLAG(&huart1);//清除中断标志
    // __enable_irq();
 
+    HAL_RCC_DeInit();
 
-  HAL_Init();
 
   /* USER CODE BEGIN Init */
-    HAL_RCC_DeInit();
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
+    HAL_Init();
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
@@ -112,7 +167,15 @@ int main(void)
   MX_USART1_UART_Init();
   MX_I2C1_Init();
 
+  //MX_GPIO_Init1();
+  //MX_TIM2_Init();
 
+  //HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);
+  //HAL_NVIC_EnableIRQ(TIM2_IRQn);
+
+ // HAL_TIM_Base_Start_IT(&htim2);
+
+ // while(1);
 
   /* USER CODE BEGIN 2 */
 
@@ -160,6 +223,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLN = 168;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 7;
+  //  RCC_OscInitStruct.PLL.PLLQ = 4;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();

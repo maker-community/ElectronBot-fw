@@ -198,7 +198,7 @@ typedef enum{
 #define GES_WAVE            BIT(8) //挥动
 
 //#define iicMaxTry 5
-#define IIC_MAX_RETRY 5  //   iic 通讯失败重试次数
+#define IIC_MAX_RETRY 1  //   iic 通讯失败重试次数
 
 u8 GS_Write_Byte(u8 REG_Address,u8 REG_data);
 u8 GS_Read_Byte(u8 REG_Address);

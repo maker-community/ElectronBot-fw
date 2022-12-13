@@ -41,7 +41,7 @@ u8 GS_Read_Byte(u8 REG_Address)
 
    // myDebug("**GS_Read_Byte***\r\n");
 
-    i=IIC_MAX_RETRY;
+   /* i=IIC_MAX_RETRY;
     do
     {
         state = HAL_I2C_Master_Transmit(&hi2c1, PAJ7620_ID, &REG_Address, 1, 5);
@@ -62,7 +62,23 @@ u8 GS_Read_Byte(u8 REG_Address)
     if(state != HAL_OK)
     {
         myDebug("paj7620u2 iic read data fail\r\n");
+    }*/
+
+    i=IIC_MAX_RETRY;
+    //HAL_Delay(2);
+    do
+    {
+        //state = HAL_I2C_Mem_Write(&hi2c1,(addr<<1)|0,reg,I2C_MEMADD_SIZE_8BIT,0,1,5);
+        //state = HAL_I2C_Mem_Write(&hi2c1,addr,reg,I2C_MEMADD_SIZE_8BIT,0,1,5);
+        state = HAL_I2C_Mem_Read(&hi2c1, PAJ7620_ID, REG_Address,1, &REG_data,1, 5);
+        i--;
+    } while (state != HAL_OK && i>0);
+    if(state != HAL_OK)
+    {
+        myDebug("paj7620u2 iic read data fail\r\n");
+       // return 1;
     }
+
     return REG_data;
 }
 
@@ -73,7 +89,7 @@ u8 GS_Read_nByte(u8 REG_Address,u16 len,u8 *buf)
 
   //  myDebug("**GS_Read_nByte***\r\n");
 
-    i=IIC_MAX_RETRY;
+   /* i=IIC_MAX_RETRY;
     do
     {
         state = HAL_I2C_Mem_Write(&hi2c1,PAJ7620_ID,REG_Address,I2C_MEMADD_SIZE_8BIT,0,1,5);
@@ -93,7 +109,22 @@ u8 GS_Read_nByte(u8 REG_Address,u16 len,u8 *buf)
     }while (state != HAL_OK && i>0);
     if(state != HAL_OK)
     {
-        myDebug("paj7620u2 iic read data fail\r\n");
+        myDebug("paj7620u2 iic read n data fail\r\n");
+    }*/
+
+    i=IIC_MAX_RETRY;
+    //HAL_Delay(2);
+    do
+    {
+        //state = HAL_I2C_Mem_Write(&hi2c1,(addr<<1)|0,reg,I2C_MEMADD_SIZE_8BIT,0,1,5);
+        //state = HAL_I2C_Mem_Write(&hi2c1,addr,reg,I2C_MEMADD_SIZE_8BIT,0,1,5);
+        state = HAL_I2C_Mem_Read(&hi2c1, PAJ7620_ID, REG_Address,1, buf,len, 5);
+        i--;
+    } while (state != HAL_OK && i>0);
+    if(state != HAL_OK)
+    {
+        myDebug("paj7620u2 iic read n data fail\r\n");
+        // return 1;
     }
 
     return 0;
@@ -250,22 +281,28 @@ void Gesture(void)
     u8 status;
     u8 data[2]={0x00};
     u16 gesture_data;
-   // HAL_Delay(5);
+    //HAL_Delay(1);
+   // vTaskDelay(1);
 
    // while(iic_lock);
     //gesture_iic_lock= true;
     //timeCount++;
-    if(GestureTimeCount>=100) {
-        GestureTimeCount=0;
+   // if(GestureTimeCount>=100) {
+   //     GestureTimeCount=0;
         //timeCount=0;
         xSemaphoreTake(xMutex, portMAX_DELAY);
         // HAL_Delay(3);
-        // HAL_Delay(3);
+        HAL_Delay(1);
         //if (iic_lock== false)
+        //vTaskDelay(1);
+       // MX_I2C1_Init();
          status = GS_Read_nByte(PAJ_GET_INT_FLAG1,2,&data[0]);//读取手势状态
         //gesture_iic_lock = false;
+        //vTaskDelay(1);
+         HAL_Delay(1);
         xSemaphoreGive(xMutex);
-    }
+   // }
+
     if(!status)
     {
         gesture_data =(u16)data[1]<<8 | data[0];
@@ -286,6 +323,6 @@ void Gesture(void)
             }
         }
     }
-    vTaskDelay(10);
+    //vTaskDelay(10);
     //HAL_Delay(10);
 }

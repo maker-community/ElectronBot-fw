@@ -8,7 +8,12 @@
 #include "invMpu.h"
 #include "protocol.h"
 //#include "crcLib.h"
-
+#include "cmsis_os2.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "portmacro.h"
+#include "semphr.h"
 
 
 Robot electron(&hspi1, &hi2c1);
@@ -20,12 +25,12 @@ bool isEnabled = false;
  uint32_t MPU_6050_init_time_count=0;
  void MPU_6050_init(void)
  {
-     int reg_0x25=0,reg_107=0;
-     reg_0x25=MPU_Read_Byte(0x75);
-     myPrintf("\r\nreg_0x25=%x\r\n",reg_0x25);
+     int reg_0x75=0;
+     reg_0x75=MPU_Read_Byte(0x75);
+     myPrintf("\r\nreg_0x75=%x\r\n",reg_0x75);
      printf("\r\n////////////////////////////////\r\n");
      HAL_Delay(20);
-     if(reg_0x25==0x68)
+     if(reg_0x75==0x68)
      {
         myPrintf("MPU6050 iic ok!!\r\n");
         MPU6050_ConnectionStatusChange (true);
@@ -200,11 +205,11 @@ void CheckJointsConnectionStatus()
  bool iicFailPrintfEn= false;
 void rotationTest(void)
 {
-    char VERSION[]={"1.0.0.0"};
+    char VERSION[]={"1.0.1.0"};//{"1.0.0.0"}
     myPrintf("------------------------------------ \r\n");
 
-    myPrintf("ElectionBot-fw (rotation test mode)\r\n");
-    //myPrintf("ElectionBot-fw (rotation test mode)\r\n");
+    myPrintf("ElectronBot-fw (rotation test mode)\r\n");
+    //myPrintf("ElectronBot-fw (rotation test mode)\r\n");
     myPrintf("version is %s\r\n",VERSION);
     myPrintf("------------------------------------ \r\n");
     HAL_Delay(200);
@@ -248,11 +253,11 @@ void rotationTest(void)
 }
  void paj7620Test()
  {
-     char VERSION[]={"1.0.0.0"};
+     char VERSION[]={"1.0.1.0"};//{"1.0.0.0"}
      myPrintf("------------------------------------ \r\n");
 
-     myPrintf("ElectionBot-fw (paj7620 test mode)\r\n");
-     //myPrintf("ElectionBot-fw (rotation test mode)\r\n");
+     myPrintf("ElectronBot-fw (paj7620 test mode)\r\n");
+     //myPrintf("ElectronBot-fw (rotation test mode)\r\n");
      myPrintf("version is %s\r\n",VERSION);
      myPrintf("------------------------------------ \r\n");
      HAL_Delay(200);
@@ -264,11 +269,11 @@ void rotationTest(void)
 
  void mpu6050Test()
  {
-     char VERSION[]={"1.0.0.0"};
+     char VERSION[]={"1.0.1.0"};//{"1.0.0.0"}
      myPrintf("------------------------------------ \r\n");
 
-     myPrintf("ElectionBot-fw (mpu6050 test mode)\r\n");
-     //myPrintf("ElectionBot-fw (rotation test mode)\r\n");
+     myPrintf("ElectronBot-fw (mpu6050 test mode)\r\n");
+     //myPrintf("ElectronBot-fw (rotation test mode)\r\n");
      myPrintf("version is %s\r\n",VERSION);
      myPrintf("------------------------------------ \r\n");
      HAL_Delay(200);
@@ -276,7 +281,10 @@ void rotationTest(void)
      StatusReportingOnce();
      while(1)MPU_6050_read();
  }
-
+uint8_t GestureMainResumeEn=0;
+ extern  osThreadId_t gestureTaskHandle;
+ uint8_t JointChangeEn=0;
+ extern SemaphoreHandle_t xMutex;
  void GestureMain(void)
  {
      //while(1);
@@ -287,11 +295,11 @@ void rotationTest(void)
     // MX_USART1_UART_Init();
   //   HAL_UART_Receive_DMA(&huart1,(uint8_t*)ReceiveBuff,BUFFERSIZE);
  //    __HAL_UART_CLEAR_IDLEFLAG(&huart1);
- //    __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
+ //    __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);normalModeTestnormalModeTest
 
     // while(1);
      //while(1)uart1_data();
-     //GestureInit();
+    // GestureInit();
    //  MPU_6050_init();
      while(1){
         // CheckJointsConnectionStatus();
@@ -299,7 +307,45 @@ void rotationTest(void)
       //   MPU_6050_read();
         // StatusReporting();
          uart1_data();
+         //Gesture();
 
+         /*if(JointChangeEn) {
+             xSemaphoreTake(xMutex, portMAX_DELAY);
+             JointChangeEn = 0;
+             xSemaphoreGive(xMutex);
+             uint8_t *ptr = electron.GetExtraDataRxPtr();
+             //vTaskDelay(1);
+             HAL_Delay(1);
+             if (isEnabled != (bool) ptr[0]) {
+                 isEnabled = ptr[0];
+                 electron.SetJointEnable(electron.joint[1], isEnabled);
+                 electron.SetJointEnable(electron.joint[2], isEnabled);
+                 electron.SetJointEnable(electron.joint[3], isEnabled);
+                 electron.SetJointEnable(electron.joint[4], isEnabled);
+                 electron.SetJointEnable(electron.joint[5], isEnabled);
+                 electron.SetJointEnable(electron.joint[6], isEnabled);
+             }
+             for (int j = 0; j < 6; j++) {
+                 jointSetPoints[j] = *((float *) (ptr + 4 * j + 1));
+             }
+             //vTaskDelay(1);
+             HAL_Delay(1);
+             electron.UpdateJointAngle(electron.joint[1], jointSetPoints[0]);
+             electron.UpdateJointAngle(electron.joint[2], jointSetPoints[1]);
+             electron.UpdateJointAngle(electron.joint[3], jointSetPoints[2]);
+             electron.UpdateJointAngle(electron.joint[4], jointSetPoints[3]);
+             electron.UpdateJointAngle(electron.joint[5], jointSetPoints[4]);
+             electron.UpdateJointAngle(electron.joint[6], jointSetPoints[5]);
+            // vTaskDelay(1);
+             HAL_Delay(1);
+         }
+        // Gesture();
+
+         GestureMainResumeEn= 1;*/
+        // vTaskSuspend(NULL);
+       //  vTaskResume((TaskHandle_t)defaultTaskHandle);
+       //  vTaskSuspend ((TaskHandle_t)defaultTaskHandle);
+         vTaskSuspend ((TaskHandle_t)gestureTaskHandle);
      }
      MPU_6050_init();
      while(1)MPU_6050_read();
@@ -311,11 +357,11 @@ void rotationTest(void)
 
 void normalMode(void )
 {
-    char VERSION[]={"1.0.0.0"};
+    char VERSION[]={"1.0.1.1"};//{"1.0.0.0"}
     myPrintf("------------------------------------ \r\n");
 
-    myPrintf("ElectionBot-fw (normal mode)\r\n");
-    //myPrintf("ElectionBot-fw (rotation test mode)\r\n");
+    myPrintf("ElectronBot-fw (normal mode)\r\n");
+    //myPrintf("ElectronBot-fw (rotation test mode)\r\n");
     myPrintf("version is %s\r\n",VERSION);
     myPrintf("------------------------------------ \r\n");
     HAL_Delay(200);
@@ -370,8 +416,14 @@ void normalMode(void )
         }
         HAL_Delay(1);
 #endif
+        /*xSemaphoreTake(xMutex, portMAX_DELAY);
+        JointChangeEn = 1;
+        xSemaphoreGive(xMutex);
+        vTaskResume((TaskHandle_t)gestureTaskHandle);
+        //vTaskSuspend ((TaskHandle_t)defaultTaskHandle);
 
-
+        vTaskDelay(25);
+        */
         t += 0.01;
 
         electron.UpdateJointAngle(electron.joint[1], jointSetPoints[0]);
@@ -382,7 +434,7 @@ void normalMode(void )
         electron.UpdateJointAngle(electron.joint[6], jointSetPoints[5]);
 
         HAL_Delay(1);
-
+        //Gesture();
 //      electron.UpdateJointAngle(electron.joint[ANY], 65 + 75 * std::sin(t));
 
         // printf("%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n",
@@ -390,6 +442,134 @@ void normalMode(void )
         //        jointSetPoints[3], jointSetPoints[4], jointSetPoints[5]);
     }
 }
+
+ void normalModeTest(void )
+ {
+     char VERSION[]={"1.0.1.1"};//{"1.0.0.0"}
+     myPrintf("------------------------------------ \r\n");
+
+     myPrintf("ElectronBot-fw (normal mode)\r\n");
+     //myPrintf("ElectronBot-fw (rotation test mode)\r\n");
+     myPrintf("version is %s\r\n",VERSION);
+     myPrintf("------------------------------------ \r\n");
+     HAL_Delay(200);
+
+     JointStatusUpdata();
+     StatusReportingOnce();
+     float t = 0;
+     iicFailPrintfEn= true;
+     // electron.SetJointKp(electron.joint[2], 40);
+     // electron.SetJointTorqueLimit(electron.joint[2], 1.0);
+     // while(1);
+
+
+     electron.SetJointEnable(electron.joint[1],true);
+     electron.SetJointEnable(electron.joint[2], true);
+     electron.SetJointEnable(electron.joint[3], true);
+     electron.SetJointEnable(electron.joint[4], true);
+     electron.SetJointEnable(electron.joint[5], true);
+     electron.SetJointEnable(electron.joint[6], true);
+
+     while(1)
+     {
+         for (int i = -15;
+              i < 15; i += 1) {
+             float angle = i;
+
+             electron.UpdateJointAngle(electron.joint[1], angle);
+             electron.UpdateJointAngle(electron.joint[2], angle);
+             electron.UpdateJointAngle(electron.joint[3], angle);
+             electron.UpdateJointAngle(electron.joint[4], angle);
+             electron.UpdateJointAngle(electron.joint[5], angle);
+             electron.UpdateJointAngle(electron.joint[6], angle);
+            // Gesture();
+             HAL_Delay(20);
+         }
+         for (int i = 15;
+              i > -15; i -= 1) {
+             float angle = i;
+             electron.UpdateJointAngle(electron.joint[1], angle);
+             electron.UpdateJointAngle(electron.joint[2], angle);
+             electron.UpdateJointAngle(electron.joint[3], angle);
+             electron.UpdateJointAngle(electron.joint[4], angle);
+             electron.UpdateJointAngle(electron.joint[5], angle);
+             electron.UpdateJointAngle(electron.joint[6], angle);
+             //Gesture();
+             HAL_Delay(20);
+         }
+     }
+     electron.SetJointEnable(electron.joint[0], false);
+
+
+     while (true)
+     {
+#if 1
+         for (int p = 0; p < 4; p++)
+         {
+             // send joint angles
+             for (int j = 0; j < 6; j++)
+                 for (int i = 0; i < 4; i++)
+                 {
+                     auto* b = (unsigned char*) &(electron.joint[j + 1].angle);
+                     electron.usbBuffer.extraDataTx[j * 4 + i + 1] = *(b + i);
+                 }
+             electron.SendUsbPacket(electron.usbBuffer.extraDataTx, 32);
+
+             electron.ReceiveUsbPacketUntilSizeIs(224); // last packet is 224bytes
+
+             // get joint angles
+             /*uint8_t* ptr = electron.GetExtraDataRxPtr();
+             if (isEnabled != (bool) ptr[0])
+             {
+                 isEnabled = ptr[0];
+                 electron.SetJointEnable(electron.joint[1], isEnabled);
+                 electron.SetJointEnable(electron.joint[2], isEnabled);
+                 electron.SetJointEnable(electron.joint[3], isEnabled);
+                 electron.SetJointEnable(electron.joint[4], isEnabled);
+                 electron.SetJointEnable(electron.joint[5], isEnabled);
+                 electron.SetJointEnable(electron.joint[6], isEnabled);
+             }
+             for (int j = 0; j < 6; j++)
+             {
+                 jointSetPoints[j] = *((float*) (ptr + 4 * j + 1));
+             }*/
+
+             while (electron.lcd->isBusy);
+             if (p == 0)
+                 electron.lcd->WriteFrameBuffer(electron.GetLcdBufferPtr(),
+                                                60 * 240 * 3);
+             else
+                 electron.lcd->WriteFrameBuffer(electron.GetLcdBufferPtr(),
+                                                60 * 240 * 3, true);
+         }
+         HAL_Delay(1);
+#endif
+         xSemaphoreTake(xMutex, portMAX_DELAY);
+         JointChangeEn = 1;
+         xSemaphoreGive(xMutex);
+         vTaskResume((TaskHandle_t)gestureTaskHandle);
+         //vTaskSuspend ((TaskHandle_t)defaultTaskHandle);
+
+         vTaskDelay(25);
+
+         t += 0.01;
+
+         /* electron.UpdateJointAngle(electron.joint[1], jointSetPoints[0]);
+          electron.UpdateJointAngle(electron.joint[2], jointSetPoints[1]);
+          electron.UpdateJointAngle(electron.joint[3], jointSetPoints[2]);
+          electron.UpdateJointAngle(electron.joint[4], jointSetPoints[3]);
+          electron.UpdateJointAngle(electron.joint[5], jointSetPoints[4]);
+          electron.UpdateJointAngle(electron.joint[6], jointSetPoints[5]);
+
+          HAL_Delay(1);
+          */
+//      electron.UpdateJointAngle(electron.joint[ANY], 65 + 75 * std::sin(t));
+
+         // printf("%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n",
+         //        jointSetPoints[0], jointSetPoints[1], jointSetPoints[2],
+         //        jointSetPoints[3], jointSetPoints[4], jointSetPoints[5]);
+     }
+ }
  void Main(void)
  {
      HAL_UART_Receive_DMA(&huart1,(uint8_t*)ReceiveBuff,BUFFERSIZE);
@@ -409,11 +589,11 @@ void normalMode(void )
      electron.lcd->Init(Screen::DEGREE_0);
      electron.lcd->SetWindow(0, 239, 0, 239);
 
-
-    // while(1)normalMode();
-     //while(1)rotationTest();
-     //while(1)paj7620Test();
-     while(1)mpu6050Test();
+   //  while(1)normalModeTest();
+     while(1)normalMode();
+    // while(1)rotationTest();
+    // while(1)paj7620Test();
+    // while(1)mpu6050Test();
 
 
    /*  electron.UpdateJointAngle(electron.joint[1], 0);

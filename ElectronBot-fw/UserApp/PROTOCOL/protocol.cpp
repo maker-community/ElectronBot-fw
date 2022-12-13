@@ -704,13 +704,16 @@ void JointStatusUpdata(void)
 
             flashSave.ElectronBotjoint[i].enable = false;
             flashSave.ElectronBotjoint[i].torqueLimit = 0.5;
-            flashSave.ElectronBotjoint[i].kp = 10;
+            //flashSave.ElectronBotjoint[i].kp = 10;
+            flashSave.ElectronBotjoint[i].kp = 20;
             flashSave.ElectronBotjoint[i].ki = 0;
             flashSave.ElectronBotjoint[i].kv = 0;
             flashSave.ElectronBotjoint[i].kd = 50;
             PrintfElectronBotJointStatus(&flashSave.ElectronBotjoint[i],i*2);
 
             electron.UpdateJointAngle(electron.joint[i], 0);
+            HAL_Delay(50);
+            electron.SetJointKp(electron.joint[i], flashSaved.kp);
             HAL_Delay(50);
 
             /*HAL_Delay(50);

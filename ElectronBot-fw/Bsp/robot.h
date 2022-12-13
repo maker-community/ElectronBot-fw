@@ -287,7 +287,8 @@ private:
     uint8_t i2cTxData[8];
     uint8_t usbExtraData[32];
 
-    void TransmitAndReceiveI2cPacket(uint8_t _id);
+    //void TransmitAndReceiveI2cPacket(uint8_t _id);
+    bool TransmitAndReceiveI2cPacket(uint8_t _id);
 };
 
 #endif //ELECTRONBOT_FW_ROBOT_H

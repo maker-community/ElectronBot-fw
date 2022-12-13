@@ -23,12 +23,13 @@ PUTCHAR_PROTOTYPE
 void myPrintf(const char* format, ...)
 {
     printf(format);
-    HAL_Delay(20);
+    //HAL_Delay(20);
+    HAL_Delay(10);
 }
 
 void myDebug(const char* format, ...)
 {
-#if  1
+#if  0
     printf(format);
     HAL_Delay(20);
 #endif
