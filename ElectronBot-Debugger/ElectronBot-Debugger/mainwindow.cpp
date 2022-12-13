@@ -1584,48 +1584,22 @@ void MainWindow::on_writeElectronBotIdBt_clicked()
       serialPort->write(sendData.data(),sendData.length());
 }
 
+
 void MainWindow::on_writeJointStatus_2_clicked()
 {
-    //settings = new QSettings();
-
-
-    //如果不存在Config.ini，便生成一个Config.ini。如果已经存在了，则略过。
-    //if(!QFile::exists("setting.ini"))
-    //{
-    //     QSettings configIniWrite("setting.ini",QSettings::IniFormat);
-       // 输出setting.ini得文件路径，就可以找到配置文件了
-    //   qDebug() << QCoreApplication::applicationDirPath();
-   // }
-
     QString sub;
-    QString  source=QCoreApplication::applicationDirPath();
+    QString  source;//=QCoreApplication::applicationDirPath();
+    source=getUserfilePath();
+
     sub="JointStauts-ini";
     source={source+"/"+sub+"/"};
     sub="defaultJointStauts.ini";
-    //source={source+"/"+sub+"/"};
+
     source={source+sub};
-   // settings = new QSettings("defaultJointStauts.ini",QSettings::IniFormat);
+
      settings = new QSettings(source,QSettings::IniFormat);
 
-       //通过setValue函数将键值对放在相对于的节下面
-       // 格式： settings->setValue("节名/键名","键值");
-
-       //settings->setValue("student/name","zs");
-      // settings->setValue("student/age","18");
-      // settings->setValue("student/sex","male");
-
-       // 通过value获取值
-       // 格式： settings->value(""节名/键名"");
-       //settings->value("student/name");
-      // settings->value("student/age");
-      // settings->value("student/sex");
-
-       //qDebug() << settings->value("student/name");
-      // qDebug() << settings->value("student/age");
-      // qDebug() << settings->value("student/sex").toString();
-
        char path[][8] = {"joint0","joint2","joint4","joint6","joint8","joint10","joint12"};
-       char path2[]="joint4";
        uint8_t jointID=0;;
        QString str;
 
@@ -1633,52 +1607,39 @@ void MainWindow::on_writeJointStatus_2_clicked()
        str=ui->jointIdCb->currentText();
        jointID = str.toInt()/2;
 
-       //str.sprintf("torqueLimit=%lf",JointStatus.torqueLimit);
-       //QString value;
-       double angleMin=0;
-       double torqueLimit=0.5;
-       double value=0;
-       //settings->value("joint4/angleMin");
-       //settings->value("%s/angleMin",path);
-       //settings->value("joint4/angleMax");
-       //angleMin=settings->value("%s/angleMin",path).toDouble();
+       if(jointID==0)
+       {
+           QMessageBox::information(this, "提示", "舵机ID0为广播地址，没有默认参数", "确定");
+           return;
+       }
 
+       str.sprintf("ImportJoint%dStatus",str.toInt());
+       printfLog(str);
+
+       double value=0;
        value=0;
        str.sprintf("%s/angleMin",&path[jointID][0]);
-       //value=settings->value("joint4/angleMin").toDouble();
         value =settings->value(QString(str)).toDouble();
-       //value
-       //ui->angleMinDsb->value()=angleMin;
         ui->angleMinDsb->setValue(value);
 
-        //value=0;
-        //value =settings->value("joint4/angleMax").toDouble();
-        //ui->angleMaxDsb->setValue(value);
 
         value=0;
         str.sprintf("%s/angleMax",&path[jointID][0]);
         value =settings->value(QString(str)).toDouble();
         ui->angleMaxDsb->setValue(value);
 
-        // value=0;
-        // str.sprintf("%s/angleMax",path2);
-        // value =settings->value(QString(str)).toDouble();
-        // ui->angleMaxDsb->setValue(value);
 
         value=0;
-        //value =settings->value("joint4/modelAngleMin").toDouble();
         str.sprintf("%s/modelAngleMin",&path[jointID][0]);
         value =settings->value(QString(str)).toDouble();
         ui->modelAngleMinDsb->setValue(value);
 
         value=0;
-        //value =settings->value("joint4/modelAngleMax").toDouble();
         str.sprintf("%s/modelAngleMax",&path[jointID][0]);
         value =settings->value(QString(str)).toDouble();
         ui->modelAngleMaxDsb->setValue(value);
 
         value=0;
-        //value =settings->value("joint4/initAngle").toDouble();
         str.sprintf("%s/initAngle",&path[jointID][0]);
         value =settings->value(QString(str)).toDouble();
         ui->initAngleDsb->setValue(value);
@@ -1687,54 +1648,173 @@ void MainWindow::on_writeJointStatus_2_clicked()
         value=0;
         str.sprintf("%s/angle",&path[jointID][0]);
         value =settings->value(QString(str)).toDouble();
-        //value=2;
         ui->angleDsb->setValue(value);
 
         value=0;
-        //value =settings->value("joint4/torqueLimit").toDouble();
         str.sprintf("%s/torqueLimit",&path[jointID][0]);
         value =settings->value(QString(str)).toDouble();
         ui->torqueLimitDsb->setValue(value);
 
         value=0;
-        //value =settings->value("joint4/kp").toDouble();
         str.sprintf("%s/kp",&path[jointID][0]);
         value =settings->value(QString(str)).toDouble();
         ui->kpDsb->setValue(value);
 
         value=0;
-       // value =settings->value("joint4/ki").toDouble();
         str.sprintf("%s/ki",&path[jointID][0]);
         value =settings->value(QString(str)).toDouble();
         ui->kiDsb->setValue(value);
 
         value=0;
-        //value =settings->value("joint4/kv").toDouble();
         str.sprintf("%s/kv",&path[jointID][0]);
         value =settings->value(QString(str)).toDouble();
         ui->kvDsb->setValue(value);
 
         value=0;
-       // value =settings->value("joint4/kd").toDouble();
         str.sprintf("%s/kd",&path[jointID][0]);
         value =settings->value(QString(str)).toDouble();
         ui->kdDsb->setValue(value);
 
         bool b_value=false;
-       // b_value =settings->value("joint4/inverted").toBool();
         str.sprintf("%s/inverted",&path[jointID][0]);
         b_value =settings->value(QString(str)).toBool();
         ui->invertedCb->setChecked(b_value);
 
-       // b_value =settings->value("joint4/enable").toBool();
         str.sprintf("%s/enable",&path[jointID][0]);
         b_value =settings->value(QString(str)).toBool();
         ui->enableCb->setChecked(b_value);
-
-
-       //qDebug() << settings->value("%s/angleMin",path);
-       //qDebug() << settings->value("joint4/angleMax");
 }
+
+void MainWindow::on_jointIdCb_currentTextChanged(const QString &arg1)
+{
+
+
+    char path[][8] = {"joint0","joint2","joint4","joint6","joint8","joint10","joint12"};
+    uint8_t jointID=0;;
+    QString str;
+
+
+    str=ui->jointIdCb->currentText();
+    jointID = str.toInt()/2;
+
+
+
+    if(jointID==0)
+    {
+       // QMessageBox::information(this, "提示", "舵机ID0为广播地址，没有默认参数", "确定");
+        return;
+    }
+
+   // if(ui->useCustomWebAddressRb->isChecked())
+    //if(ui->autoImportJointStatusFromDefaultRb->isChecked())
+   // {
+
+        QString  source,sub;
+        //if(ui->inipathEdit->text()==NULL)
+        if(ui->autoImportJointStatusDisableRb->isChecked())
+        {
+            return;
+        }
+        else if(ui->autoImportJointStatusFromDefaultRb->isChecked())
+        {
+            //source=QCoreApplication::applicationDirPath();
+            source=getUserfilePath();
+            sub="JointStauts-ini";
+            source={source+"/"+sub+"/"};
+            sub="defaultJointStauts.ini";
+
+            source={source+sub};
+            // printfLog(source);
+             str.sprintf("自动从默认参数文件导入参数");
+             printfLog(str);
+
+             settings = new QSettings(source,QSettings::IniFormat);
+        }
+        else if(ui->autoImportJointStatusRb->isChecked())
+        {
+            str.sprintf("自动从自定义参数文件导入参数");
+            printfLog(str);
+            if(ui->inipathEdit->text()==NULL)
+            {
+                QMessageBox::critical(this, "错误", "请先导入参数配置文件", "确定");
+                return ;
+            }
+            settings = new QSettings(ui->inipathEdit->text(),QSettings::IniFormat);
+        }
+
+       str.sprintf("ImportJoint%dStatus",jointID*2);
+       printfLog(str);
+
+       double value=0;
+       value=0;
+       str.sprintf("%s/angleMin",&path[jointID][0]);
+        value =settings->value(QString(str)).toDouble();
+        ui->angleMinDsb->setValue(value);
+
+
+        value=0;
+        str.sprintf("%s/angleMax",&path[jointID][0]);
+        value =settings->value(QString(str)).toDouble();
+        ui->angleMaxDsb->setValue(value);
+
+
+        value=0;
+        str.sprintf("%s/modelAngleMin",&path[jointID][0]);
+        value =settings->value(QString(str)).toDouble();
+        ui->modelAngleMinDsb->setValue(value);
+
+        value=0;
+        str.sprintf("%s/modelAngleMax",&path[jointID][0]);
+        value =settings->value(QString(str)).toDouble();
+        ui->modelAngleMaxDsb->setValue(value);
+
+        value=0;
+        str.sprintf("%s/initAngle",&path[jointID][0]);
+        value =settings->value(QString(str)).toDouble();
+        ui->initAngleDsb->setValue(value);
+
+
+        value=0;
+        str.sprintf("%s/angle",&path[jointID][0]);
+        value =settings->value(QString(str)).toDouble();
+        ui->angleDsb->setValue(value);
+
+        value=0;
+        str.sprintf("%s/torqueLimit",&path[jointID][0]);
+        value =settings->value(QString(str)).toDouble();
+        ui->torqueLimitDsb->setValue(value);
+
+        value=0;
+        str.sprintf("%s/kp",&path[jointID][0]);
+        value =settings->value(QString(str)).toDouble();
+        ui->kpDsb->setValue(value);
+
+        value=0;
+        str.sprintf("%s/ki",&path[jointID][0]);
+        value =settings->value(QString(str)).toDouble();
+        ui->kiDsb->setValue(value);
+
+        value=0;
+        str.sprintf("%s/kv",&path[jointID][0]);
+        value =settings->value(QString(str)).toDouble();
+        ui->kvDsb->setValue(value);
+
+        value=0;
+        str.sprintf("%s/kd",&path[jointID][0]);
+        value =settings->value(QString(str)).toDouble();
+        ui->kdDsb->setValue(value);
+
+        bool b_value=false;
+        str.sprintf("%s/inverted",&path[jointID][0]);
+        b_value =settings->value(QString(str)).toBool();
+        ui->invertedCb->setChecked(b_value);
+
+        str.sprintf("%s/enable",&path[jointID][0]);
+        b_value =settings->value(QString(str)).toBool();
+        ui->enableCb->setChecked(b_value);
+    //}
+}
+
 
 void MainWindow::on_appBt_clicked()
 {
@@ -1915,6 +1995,11 @@ void MainWindow::on_importIniStatusBt_clicked()
        //qDebug() << settings->value("student/name");
       // qDebug() << settings->value("student/age");
       // qDebug() << settings->value("student/sex").toString();
+        if(ui->inipathEdit->text()==NULL)
+        {
+            QMessageBox::critical(this, "错误", "请先导入参数配置文件", "确定");
+            return ;
+        }
 
        char path[][8] = {"joint0","joint2","joint4","joint6","joint8","joint10","joint12"};
        char path2[]="joint4";
@@ -2026,7 +2111,16 @@ void MainWindow::on_importIniStatusBt_clicked()
 void MainWindow::on_iniSaveBt_clicked()
 {
     // QSettings settings(ui->apppathEdit->text());    //要读取的bin文件
-     settings = new QSettings(ui->inipathEdit->text(),QSettings::IniFormat);
+    QString str;
+    if(ui->inipathEdit->text()==NULL)
+    {
+        QMessageBox::critical(this, "错误", "请先导入参数配置文件", "确定");
+        return ;
+    }
+    else
+    {
+        settings = new QSettings(ui->inipathEdit->text(),QSettings::IniFormat);
+    }
 
  //通过setValue函数将键值对放在相对于的节下面
     // 格式： settings->setValue("节名/键名","键值");
@@ -2048,7 +2142,7 @@ void MainWindow::on_iniSaveBt_clicked()
     char path[][8] = {"joint0","joint2","joint4","joint6","joint8","joint10","joint12"};
     char path2[]="joint4";
     uint8_t jointID=0;;
-    QString str;
+
 
 
     str=ui->jointIdCb->currentText();
@@ -2246,6 +2340,7 @@ void MainWindow::on_iniSaveBt_clicked()
      }
      settings->setValue(QString(str), b_value);
 
+    QMessageBox::information(this, "提示", "参数保存成功", "确定");
 }
 
 
@@ -2800,3 +2895,4 @@ void MainWindow::fileInit(void)
     copyDir(source,destination,true);
 
 }
+

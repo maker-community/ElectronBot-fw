@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1227</width>
+    <width>1191</width>
     <height>776</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1191</width>
+    <height>776</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>ElectronBot-Debugger</string>
@@ -410,15 +416,18 @@
       <rect>
        <x>150</x>
        <y>20</y>
-       <width>69</width>
+       <width>41</width>
        <height>22</height>
       </rect>
      </property>
      <property name="currentText">
-      <string>2</string>
+      <string>12</string>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>6</number>
+     </property>
+     <property name="maxCount">
+      <number>2147483647</number>
      </property>
      <property name="modelColumn">
       <number>0</number>
@@ -539,7 +548,7 @@
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>220</x>
+       <x>200</x>
        <y>20</y>
        <width>54</width>
        <height>12</height>
@@ -554,7 +563,7 @@
       <rect>
        <x>150</x>
        <y>50</y>
-       <width>69</width>
+       <width>41</width>
        <height>22</height>
       </rect>
      </property>
@@ -605,6 +614,52 @@
       <string>不要随便改动这个窗口里的东西</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
+      <item row="2" column="0" colspan="2">
+       <widget class="QCheckBox" name="invertedCb">
+        <property name="text">
+         <string>inverted</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+        <property name="tristate">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QDoubleSpinBox" name="kiDsb">
+        <property name="decimals">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <double>100.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="value">
+         <double>0.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QLabel" name="label_12">
+        <property name="text">
+         <string>kv</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>angle</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0">
        <widget class="QDoubleSpinBox" name="initAngleDsb">
         <property name="decimals">
@@ -621,6 +676,39 @@
         </property>
         <property name="value">
          <double>0.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QDoubleSpinBox" name="angleDsb">
+        <property name="decimals">
+         <number>1</number>
+        </property>
+        <property name="minimum">
+         <double>-180.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>180.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="value">
+         <double>0.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="enableCb">
+        <property name="text">
+         <string>enable</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string>ki</string>
         </property>
        </widget>
       </item>
@@ -647,62 +735,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="3">
-       <widget class="QLabel" name="label_12">
-        <property name="text">
-         <string>kv</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QDoubleSpinBox" name="angleDsb">
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="minimum">
-         <double>-180.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>180.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>0.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLabel" name="label_9">
-        <property name="text">
-         <string>angle</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QDoubleSpinBox" name="kiDsb">
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <double>100.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="value">
-         <double>0.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QLabel" name="label_11">
-        <property name="text">
-         <string>ki</string>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="2" rowspan="2">
        <widget class="QDoubleSpinBox" name="kdDsb">
         <property name="decimals">
@@ -723,29 +755,6 @@
        <widget class="QLabel" name="label_13">
         <property name="text">
          <string>kd</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QCheckBox" name="enableCb">
-        <property name="text">
-         <string>enable</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" colspan="2">
-       <widget class="QCheckBox" name="invertedCb">
-        <property name="text">
-         <string>inverted</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
-        </property>
-        <property name="tristate">
-         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -805,7 +814,7 @@
          <double>1.000000000000000</double>
         </property>
         <property name="value">
-         <double>0.000000000000000</double>
+         <double>-90.000000000000000</double>
         </property>
        </widget>
       </item>
@@ -831,7 +840,7 @@
          <double>1.000000000000000</double>
         </property>
         <property name="value">
-         <double>0.000000000000000</double>
+         <double>180.000000000000000</double>
         </property>
        </widget>
       </item>
@@ -857,7 +866,7 @@
          <double>1.000000000000000</double>
         </property>
         <property name="value">
-         <double>0.000000000000000</double>
+         <double>90.000000000000000</double>
         </property>
        </widget>
       </item>
@@ -918,7 +927,7 @@
          <double>1.000000000000000</double>
         </property>
         <property name="value">
-         <double>10.000000000000000</double>
+         <double>20.000000000000000</double>
         </property>
        </widget>
       </item>
@@ -936,7 +945,7 @@
       <rect>
        <x>0</x>
        <y>445</y>
-       <width>270</width>
+       <width>241</width>
        <height>121</height>
       </rect>
      </property>
@@ -965,24 +974,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0" colspan="2">
-       <widget class="QPushButton" name="iniBt">
-        <property name="minimumSize">
-         <size>
-          <width>100</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>导入本地自定义配置文件</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0" colspan="2">
        <widget class="QPushButton" name="iniSaveBt">
         <property name="minimumSize">
@@ -998,6 +989,24 @@
         </property>
         <property name="text">
          <string>保存设置到本地配置文件</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QPushButton" name="iniBt">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>导入本地自定义配置文件</string>
         </property>
        </widget>
       </item>
@@ -1035,7 +1044,7 @@
     <widget class="QLabel" name="label_40">
      <property name="geometry">
       <rect>
-       <x>220</x>
+       <x>200</x>
        <y>50</y>
        <width>54</width>
        <height>12</height>
@@ -1070,6 +1079,61 @@
      <property name="text">
       <string>导入自定义配置文件参数到面板</string>
      </property>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_21">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>470</y>
+       <width>81</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>自动导入参数</string>
+     </property>
+     <widget class="QRadioButton" name="autoImportJointStatusDisableRb">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>91</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>不执行</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="autoImportJointStatusFromDefaultRb">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>默认</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="autoImportJointStatusRb">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>自定义</string>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_7">
@@ -1984,8 +2048,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>1100</x>
-      <y>640</y>
+      <x>1070</x>
+      <y>620</y>
       <width>106</width>
       <height>23</height>
      </rect>
@@ -2000,8 +2064,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>1020</x>
-      <y>640</y>
+      <x>990</x>
+      <y>620</y>
       <width>69</width>
       <height>22</height>
      </rect>
@@ -2053,8 +2117,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>1100</x>
-      <y>670</y>
+      <x>1070</x>
+      <y>650</y>
       <width>121</width>
       <height>23</height>
      </rect>
@@ -2069,8 +2133,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>1020</x>
-      <y>670</y>
+      <x>990</x>
+      <y>650</y>
       <width>69</width>
       <height>22</height>
      </rect>
@@ -2092,8 +2156,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>1020</x>
-      <y>550</y>
+      <x>990</x>
+      <y>530</y>
       <width>120</width>
       <height>80</height>
      </rect>
@@ -2147,7 +2211,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1227</width>
+     <width>1191</width>
      <height>22</height>
     </rect>
    </property>

@@ -173,6 +173,8 @@ private slots:
 
     void on_version_triggered();
 
+    void on_jointIdCb_currentTextChanged(const QString &arg1);
+
 private:
 //    void initComm();
 //    bool isOpen();
