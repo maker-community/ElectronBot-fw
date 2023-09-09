@@ -276,8 +276,15 @@ public:
     void UpdateJointAngle(JointStatus_t &_joint);
     void UpdateJointAngle(JointStatus_t &_joint, float _angleSetPoint);
 
-    Screen* lcd;
+    void JointADCValueRead(JointStatus_t &_joint, uint8_t _id);
+    void JointPWMChnel1Test(JointStatus_t &_joint, uint8_t _id);
+    void JointPWMChnel2Test(JointStatus_t &_joint, uint8_t _id);
+    void JointPWMChnelTestClose(JointStatus_t &_joint, uint8_t _id);
+    char* JointFamerWareVersionRead(JointStatus_t &_joint, uint8_t _id);
+    char* JointIdRead(Robot::JointStatus_t &_joint, uint8_t _id);
+    void JointSystemReset(JointStatus_t &_joint, uint8_t _id);
 
+    Screen* lcd;
 
 private:
     SPI_HandleTypeDef* screenSpi;

@@ -115,17 +115,21 @@ bool Robot::TransmitAndReceiveI2cPacket(uint8_t _id)
     HAL_StatusTypeDef state = HAL_ERROR;
     int iicreTry=2;
     //while(gesture_iic_lock == true);
-    xSemaphoreTake(xMutex, portMAX_DELAY);
-    iic_lock=true;
+
+    vPortEnterCritical();
+   // xSemaphoreTake(xMutex, portMAX_DELAY);
+   // iic_lock=true;
     //HAL_Delay(3);
    // HAL_Delay(3);
     do
     {
         //state = HAL_I2C_IsDeviceReady(motorI2c);
         state = HAL_I2C_Master_Transmit(motorI2c, _id, i2cTxData, 5, 5);
+        //state = HAL_I2C_Master_Transmit_IT(motorI2c, _id, i2cTxData,5);
         iicreTry--;
     } while (state != HAL_OK && iicreTry>0);
     iicreTry=2;
+
 
     if(state==HAL_OK)
     {
@@ -138,18 +142,20 @@ bool Robot::TransmitAndReceiveI2cPacket(uint8_t _id)
             myPrintf("iic write joint%d fail\r\n",_id);
             HAL_Delay(20);
         }
-        xSemaphoreGive(xMutex);
+    //    xSemaphoreGive(xMutex);
+        vPortExitCritical();
         return false;
     }
     state = HAL_ERROR;
     do
     {
         state = HAL_I2C_Master_Receive(motorI2c, _id, i2cRxData, 5, 5);
+        //state = HAL_I2C_Master_Receive_IT(motorI2c, _id, i2cRxData, 5);
         iicreTry--;
     } while (state != HAL_OK && iicreTry>0);
    // HAL_Delay(1);
    // iic_lock= false;
-
+    vPortExitCritical();
    if(state==HAL_OK)
    {
        JointsConnectionStatusChange(_id, true);
@@ -161,11 +167,12 @@ bool Robot::TransmitAndReceiveI2cPacket(uint8_t _id)
            myPrintf("iic read joint%d fail\r\n",_id);
            HAL_Delay(20);
        }
-       xSemaphoreGive(xMutex);
+      // xSemaphoreGive(xMutex);
+       vPortExitCritical();
        return false;
    }
 
-    xSemaphoreGive(xMutex);
+   // xSemaphoreGive(xMutex);
     return true;
 }
 
@@ -293,6 +300,92 @@ void Robot::SetJointKd(Robot::JointStatus_t &_joint, float _value)
     HAL_Delay(500); // wait servo reset
 }
 
+void Robot::JointADCValueRead(Robot::JointStatus_t &_joint, uint8_t _id)
+{
+    uint8_t buf[2]={0};
+    uint16_t adcValue=0;
+    float adcVoltage=0;
+    i2cTxData[0] = 0x13;
+
+    TransmitAndReceiveI2cPacket(_joint.id);
+    memcpy(buf,&i2cRxData[1],2);
+    adcValue=buf[0]+buf[1]*256;
+
+    adcVoltage=(float)adcValue*3.3/(float)4096;
+    myPrintf("\r\njoint%d  adcValue=%d adcVoltage=%f ",_joint.id,adcValue,adcVoltage);
+    printf("\r\njoint%d  adcValue=%d adcVoltage=%f ",_joint.id,adcValue,adcVoltage);
+    HAL_Delay(500); // wait servo reset
+}
+
+void Robot::JointPWMChnel1Test(Robot::JointStatus_t &_joint, uint8_t _id)
+{
+    i2cTxData[0] = 0x31;
+
+    TransmitAndReceiveI2cPacket(_joint.id);
+
+    _joint.angle = *(float*) (i2cRxData + 1);
+
+    HAL_Delay(500); // wait servo reset
+}
+
+void Robot::JointPWMChnel2Test(Robot::JointStatus_t &_joint, uint8_t _id)
+{
+    i2cTxData[0] = 0x32;
+
+    TransmitAndReceiveI2cPacket(_joint.id);
+
+    _joint.angle = *(float*) (i2cRxData + 1);
+
+    HAL_Delay(500); // wait servo reset
+}
+
+void Robot::JointPWMChnelTestClose(Robot::JointStatus_t &_joint, uint8_t _id)
+{
+    i2cTxData[0] = 0x3f;
+
+    TransmitAndReceiveI2cPacket(_joint.id);
+
+   // _joint.angle = *(float*) (i2cRxData + 1);
+
+    HAL_Delay(500); // wait servo reset
+}
+
+char* Robot::JointIdRead(Robot::JointStatus_t &_joint, uint8_t _id)
+{
+    char buf[4]={0};
+    i2cTxData[0] = 0xfc;
+
+    TransmitAndReceiveI2cPacket(_joint.id);
+    memcpy(buf,&i2cRxData[1],1);
+
+    myPrintf("joint id is %d",buf[0]);
+    HAL_Delay(500); // wait servo reset
+    return  &buf[0];
+}
+
+char* Robot::JointFamerWareVersionRead(Robot::JointStatus_t &_joint, uint8_t _id)
+{
+    char buf[4]={0};
+    i2cTxData[0] = 0xfd;
+
+    TransmitAndReceiveI2cPacket(_joint.id);
+    memcpy(buf,&i2cRxData[1],4);
+
+    myPrintf("%s",&buf[0]);
+    HAL_Delay(500); // wait servo reset
+    return  &buf[0];
+}
+
+void Robot::JointSystemReset(Robot::JointStatus_t &_joint, uint8_t _id)
+{
+    i2cTxData[0] = 0xfe;
+
+    TransmitAndReceiveI2cPacket(_joint.id);
+
+    _joint.angle = *(float*) (i2cRxData + 1);
+
+    HAL_Delay(500); // wait servo reset
+}
 
 uint8_t* Robot::GetExtraDataRxPtr()
 {

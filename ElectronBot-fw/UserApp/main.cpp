@@ -589,6 +589,47 @@ void normalMode(void )
      electron.lcd->Init(Screen::DEGREE_0);
      electron.lcd->SetWindow(0, 239, 0, 239);
 
+     while(1)
+     {
+         int i=0;
+         for(i=-500;i<500;i+=10)
+         {
+             //printf("")
+             printf("$%d %d;",i,i);
+             HAL_Delay(10);
+         }
+     }
+
+              while(1)
+    {
+        electron.JointFamerWareVersionRead(electron.joint[6],12);
+        electron.JointIdRead(electron.joint[6],12);
+//        electron.JointADCValueRead(electron.joint[6],12);
+//        HAL_Delay(500);
+        electron.JointPWMChnel1Test(electron.joint[6],12);
+        printf("JointPWMChnel1Test");
+        HAL_Delay(5000);
+        electron.JointPWMChnelTestClose(electron.joint[6],12);
+        printf("JointPWMChnelTestClose");
+        HAL_Delay(2000);
+        electron.JointPWMChnel2Test(electron.joint[6],12);
+        printf("JointPWMChnel2Test");
+        HAL_Delay(5000);
+//        electron.JointPWMChnelTestClose(electron.joint[6],12);
+//        printf("JointPWMChnelTestClose");
+//        HAL_Delay(500);
+//        electron.JointPWMChnel1Test(electron.joint[6],12);
+//        electron.JointPWMChnel2Test(electron.joint[6],12);
+//        printf("JointPWMChnel1_2Test");
+//        electron.JointPWMChnelTestClose(electron.joint[6],12);
+//        printf("JointPWMChnelTestClose");
+//        HAL_Delay(500);
+
+//          electron.JointSystemReset(electron.joint[6],12);
+//          printf("JointSystemReset");
+//          HAL_Delay(4000);
+    }
+
    //  while(1)normalModeTest();
      while(1)normalMode();
     // while(1)rotationTest();
