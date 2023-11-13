@@ -18,6 +18,8 @@ extern "C" {
 
 void Main(void);
 void GestureMain(void);
+void GyroscopeMain(void );
+void UartMain(void );
 
 
 extern uint64_t serialNumber;

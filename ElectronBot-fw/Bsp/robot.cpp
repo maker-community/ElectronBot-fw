@@ -110,17 +110,89 @@ extern bool iic_lock;
 extern SemaphoreHandle_t xMutex;
 extern bool iicFailPrintfEn;
 //void Robot::TransmitAndReceiveI2cPacket(uint8_t _id)
+//bool Robot::TransmitAndReceiveI2cPacket(uint8_t _id)
+//{
+//    HAL_StatusTypeDef state = HAL_ERROR;
+//    int iicreTry=2;
+//    //while(gesture_iic_lock == true);
+//
+//    //vPortEnterCritical();
+//
+//   // xSemaphoreTake(xMutex, portMAX_DELAY);
+//   // iic_lock=true;
+//    //HAL_Delay(3);
+//   // HAL_Delay(3);
+//    do
+//    {
+//        //state = HAL_I2C_IsDeviceReady(motorI2c);
+//        state = HAL_I2C_Master_Transmit(motorI2c, _id, i2cTxData, 5, 5);
+//        //state = HAL_I2C_Master_Transmit_IT(motorI2c, _id, i2cTxData,5);
+//        iicreTry--;
+//    } while (state != HAL_OK && iicreTry>0);
+//    iicreTry=2;
+//
+//
+//    if(state==HAL_OK)
+//    {
+//        JointsConnectionStatusChange(_id, true);
+//    }else
+//    {
+//        JointsConnectionStatusChange(_id, false);
+//        if(iicFailPrintfEn==true)
+//        {
+//            myPrintf("iic write joint%d fail\r\n",_id);
+//            HAL_Delay(20);
+//        }
+//       // xSemaphoreGive(xMutex);
+//        //vPortExitCritical();
+//        return false;
+//    }
+//    //vPortExitCritical();
+//
+//    //vPortEnterCritical();
+//    state = HAL_ERROR;
+//    do
+//    {
+//        state = HAL_I2C_Master_Receive(motorI2c, _id, i2cRxData, 5, 5);
+//        //state = HAL_I2C_Master_Receive_IT(motorI2c, _id, i2cRxData, 5);
+//        iicreTry--;
+//    } while (state != HAL_OK && iicreTry>0);
+//   // HAL_Delay(1);
+//   // iic_lock= false;
+//   // vPortExitCritical();
+//   if(state==HAL_OK)
+//   {
+//       JointsConnectionStatusChange(_id, true);
+//   }else
+//   {
+//       JointsConnectionStatusChange(_id, false);
+//       if(iicFailPrintfEn==true)
+//       {
+//           myPrintf("iic read joint%d fail\r\n",_id);
+//           HAL_Delay(20);
+//       }
+//      // xSemaphoreGive(xMutex);
+//     //  vPortExitCritical();
+//       return false;
+//   }
+//   // vPortExitCritical();
+//   // xSemaphoreGive(xMutex);
+//    return true;
+//}
+
+
 bool Robot::TransmitAndReceiveI2cPacket(uint8_t _id)
 {
     HAL_StatusTypeDef state = HAL_ERROR;
     int iicreTry=2;
     //while(gesture_iic_lock == true);
 
-    vPortEnterCritical();
-   // xSemaphoreTake(xMutex, portMAX_DELAY);
-   // iic_lock=true;
+    //vPortEnterCritical();
+
+    xSemaphoreTake(xMutex, portMAX_DELAY);
+    // iic_lock=true;
     //HAL_Delay(3);
-   // HAL_Delay(3);
+    // HAL_Delay(3);
     do
     {
         //state = HAL_I2C_IsDeviceReady(motorI2c);
@@ -142,10 +214,13 @@ bool Robot::TransmitAndReceiveI2cPacket(uint8_t _id)
             myPrintf("iic write joint%d fail\r\n",_id);
             HAL_Delay(20);
         }
-    //    xSemaphoreGive(xMutex);
-        vPortExitCritical();
+        xSemaphoreGive(xMutex);
+        //vPortExitCritical();
         return false;
     }
+    //vPortExitCritical();
+
+    //vPortEnterCritical();
     state = HAL_ERROR;
     do
     {
@@ -153,26 +228,26 @@ bool Robot::TransmitAndReceiveI2cPacket(uint8_t _id)
         //state = HAL_I2C_Master_Receive_IT(motorI2c, _id, i2cRxData, 5);
         iicreTry--;
     } while (state != HAL_OK && iicreTry>0);
-   // HAL_Delay(1);
-   // iic_lock= false;
-    vPortExitCritical();
-   if(state==HAL_OK)
-   {
-       JointsConnectionStatusChange(_id, true);
-   }else
-   {
-       JointsConnectionStatusChange(_id, false);
-       if(iicFailPrintfEn==true)
-       {
-           myPrintf("iic read joint%d fail\r\n",_id);
-           HAL_Delay(20);
-       }
-      // xSemaphoreGive(xMutex);
-       vPortExitCritical();
-       return false;
-   }
-
-   // xSemaphoreGive(xMutex);
+    // HAL_Delay(1);
+    // iic_lock= false;
+    // vPortExitCritical();
+    if(state==HAL_OK)
+    {
+        JointsConnectionStatusChange(_id, true);
+    }else
+    {
+        JointsConnectionStatusChange(_id, false);
+        if(iicFailPrintfEn==true)
+        {
+            myPrintf("iic read joint%d fail\r\n",_id);
+            HAL_Delay(20);
+        }
+        xSemaphoreGive(xMutex);
+        //  vPortExitCritical();
+        return false;
+    }
+    // vPortExitCritical();
+    xSemaphoreGive(xMutex);
     return true;
 }
 

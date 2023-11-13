@@ -1,5 +1,5 @@
 #include "myPrintf.h"
-
+#include "stdio.h"
 
 /*int fputc(int ch,FILE *f)
 {
@@ -33,5 +33,11 @@ void myDebug(const char* format, ...)
     printf(format);
     HAL_Delay(20);
 #endif
+}
+
+void myLog(...)
+{
+   //printf(format,__VA_ARGS__);
+    HAL_Delay(20);
 }
 

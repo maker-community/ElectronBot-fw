@@ -200,6 +200,8 @@ void SPI1_IRQHandler(void)
 #define BUFFERSIZE 1200	//可接收的最大数据量
 extern uint32_t recv_end_flag,Rx_len,bootfirst;
 extern  osThreadId_t gestureTaskHandle;
+extern  osThreadId_t  gyroscopeTaskHandle;
+extern  osThreadId_t  uartTaskHandle;
 //extern void GesturetTask(void *argument);
 void USART1_IRQHandler(void)
 {
@@ -223,7 +225,7 @@ void USART1_IRQHandler(void)
            // ;
            // xTaskResumeFromISR(gestureTaskHandle);
             BaseType_t YieldRequired;
-            YieldRequired=xTaskResumeFromISR(gestureTaskHandle);//恢复任务2
+            YieldRequired=xTaskResumeFromISR(uartTaskHandle);//恢复任务2
             if(YieldRequired==pdTRUE)
             {
                 /*如果函数xTaskResumeFromISR()返回值为pdTRUE，那么说明要恢复的这个任务的任务优先级等于或者高于正在运行的任务(被中断打断的任务),所以在
@@ -255,10 +257,22 @@ void TIM8_TRG_COM_TIM14_IRQHandler(void)
     MPU_6050_init_time_count++;
     StatusReportingTimeCount++;
     CheckJointsConnectionStatus_time_count++;
-  HAL_TIM_IRQHandler(&htim14);
-
+    HAL_TIM_IRQHandler(&htim14);
   /* USER CODE BEGIN TIM8_TRG_COM_TIM14_IRQn 1 */
+//    GestureTimeCount++;
+//
 
+//    if(GestureTimeCount>=50 && GestureMainResumeEn>0)
+//    {
+//        GestureTimeCount=0;
+//        BaseType_t YieldRequired;
+//        YieldRequired = xTaskResumeFromISR(gestureTaskHandle);//恢复任务2
+//        if (YieldRequired == pdTRUE) {
+//            /*如果函数xTaskResumeFromISR()返回值为pdTRUE，那么说明要恢复的这个任务的任务优先级等于或者高于正在运行的任务(被中断打断的任务),所以在
+//            退出中断的时候一定要进行上下文切换！*/
+//            //portYIELD_FROM_ISR(YieldRequired);
+//        }
+//    }
   /* USER CODE END TIM8_TRG_COM_TIM14_IRQn 1 */
 }
 
@@ -299,7 +313,19 @@ void TIM2_IRQHandler(void)
 */
     HAL_TIM_IRQHandler(&htim2);
     /* USER CODE BEGIN TIM2_IRQn 1 */
+    GestureTimeCount++;
 
+//    if(GestureTimeCount>=50 && GestureMainResumeEn>0) {
+//
+//        BaseType_t YieldRequired;
+//        GestureTimeCount=0;
+//        YieldRequired = xTaskResumeFromISR(gestureTaskHandle);//恢复任务2
+//        if (YieldRequired == pdTRUE) {
+//            /*如果函数xTaskResumeFromISR()返回值为pdTRUE，那么说明要恢复的这个任务的任务优先级等于或者高于正在运行的任务(被中断打断的任务),所以在
+//            退出中断的时候一定要进行上下文切换！*/
+//            portYIELD_FROM_ISR(YieldRequired);
+//        }
+//    }
     /* USER CODE END TIM2_IRQn 1 */
 }
 
