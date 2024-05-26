@@ -1,0 +1,10 @@
+################################################################################
+# 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
+################################################################################
+
+/ElectronBot-fw/.vs
+/ElectronBot-fw/.vscode
+/ElectronBot-fw/.idea
+/.vs
+/.vscode
+/.idea
