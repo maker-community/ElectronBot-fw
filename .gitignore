@@ -8,3 +8,6 @@
 /.vs
 /.vscode
 /.idea
+
+/ElectronBot-IAP/.idea
+/ElectronBot-IAP/cmake-build-debug
