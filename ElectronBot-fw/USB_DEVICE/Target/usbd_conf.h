@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2022 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under Ultimate Liberty license
@@ -40,7 +40,6 @@
 /* USER CODE END INCLUDE */
 
 /** @addtogroup USBD_OTG_DRIVER
-  * @brief Driver for Usb device.
   * @{
   */
 
@@ -76,6 +75,7 @@
 /*---------- -----------*/
 #define USBD_SELF_POWERED     1U
 
+#define USBD_SUPPORT_WINUSB       1U
 /****************************************/
 /* #define for FS and HS identification */
 #define DEVICE_FS 		0
@@ -89,13 +89,14 @@
   * @brief Aliases.
   * @{
   */
-/* Memory management macros make sure to use static memory allocation */
-/** Alias for memory allocation. */
 
-#define USBD_malloc         (void *)USBD_static_malloc
+/* Memory management macros */
+
+/** Alias for memory allocation. */
+#define USBD_malloc         malloc
 
 /** Alias for memory release. */
-#define USBD_free           USBD_static_free
+#define USBD_free           free
 
 /** Alias for memory set. */
 #define USBD_memset         memset
@@ -151,8 +152,6 @@
   */
 
 /* Exported functions -------------------------------------------------------*/
-void *USBD_static_malloc(uint32_t size);
-void USBD_static_free(void *p);
 
 /**
   * @}
