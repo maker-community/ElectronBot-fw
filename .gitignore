@@ -1,4 +1,4 @@
-################################################################################
+﻿################################################################################
 # 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
 ################################################################################
 
@@ -9,5 +9,10 @@
 /.vscode
 /.idea
 
+/ElectronBot-fw/cmake-build-debug
+
+/ElectronBot-IAP/cmake-build-debug
+
+/build
 /ElectronBot-IAP/.idea
 /ElectronBot-IAP/cmake-build-debug
