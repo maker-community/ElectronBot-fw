@@ -135,10 +135,10 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-   SCB->VTOR = FLASH_BASE ;
+  // SCB->VTOR = FLASH_BASE ;
 
-  //  SCB->VTOR = FLASH_BASE | 0x10000;
-  //  __set_FAULTMASK(0);
+  SCB->VTOR = FLASH_BASE | 0x10000;
+  __set_FAULTMASK(0);
 
     //__HAL_UART_CLEAR_IDLEFLAG(&huart1);//清除中断标志
    // __enable_irq();
