@@ -65,9 +65,9 @@
 
 #define USBD_VID     0x5241
 #define USBD_LANGID_STRING     1033
-#define USBD_MANUFACTURER_STRING     "Pengzhihui"
+#define USBD_MANUFACTURER_STRING     "Pengzhihui Design Maker Community Update"
 #define USBD_PID_HS     0x5241
-#define USBD_PRODUCT_STRING_HS     "ElectronBot@PZH Elite By Verdure"
+#define USBD_PRODUCT_STRING_HS     "ElectronBot Elite"
 #define USBD_CONFIGURATION_STRING_HS     "CDC Config"
 #define USBD_INTERFACE_STRING_HS     "CDC Interface"
 
