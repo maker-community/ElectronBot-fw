@@ -145,8 +145,8 @@ public:
 
         joint[2] = JointStatus_t{ // Left arm roll
                 4,
-                -9,
-                3,
+                -10,
+                10,
                 0,
                 0,
                 30,
@@ -179,8 +179,8 @@ public:
 
         joint[4] = JointStatus_t{ // Right arm roll
                 8,
-                133,
-                141,
+                120,
+                140,
                 0,
                 0,
                 30,

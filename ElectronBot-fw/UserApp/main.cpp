@@ -357,17 +357,17 @@ uint8_t GestureMainResumeEn=0;
 
 void normalMode(void )
 {
-    char VERSION[]={"1.0.1.1"};//{"1.0.0.0"}
+    char VERSION[]={"1.1.0.0"};//{"1.0.0.0"}
     myPrintf("------------------------------------ \r\n");
 
-    myPrintf("ElectronBot-fw (normal mode)\r\n");
+    myPrintf("ElectronBot-Elite-fw (normal mode)\r\n");
     //myPrintf("ElectronBot-fw (rotation test mode)\r\n");
     myPrintf("version is %s\r\n",VERSION);
     myPrintf("------------------------------------ \r\n");
     HAL_Delay(200);
 
     JointStatusUpdata();
-     StatusReportingOnce();
+    StatusReportingOnce();
     float t = 0;
 
     // electron.SetJointKp(electron.joint[2], 40);
