@@ -703,9 +703,9 @@ void JointStatusUpdata(void)
             flashSave.ElectronBotjoint[i].inverted = electron.joint[i].inverted;
 
             flashSave.ElectronBotjoint[i].enable = false;
-            flashSave.ElectronBotjoint[i].torqueLimit = 0.5;
+            flashSave.ElectronBotjoint[i].torqueLimit = 0.7;
             //flashSave.ElectronBotjoint[i].kp = 10;
-            flashSave.ElectronBotjoint[i].kp = 20;
+            flashSave.ElectronBotjoint[i].kp = 25;
             flashSave.ElectronBotjoint[i].ki = 0;
             flashSave.ElectronBotjoint[i].kv = 0;
             flashSave.ElectronBotjoint[i].kd = 50;
