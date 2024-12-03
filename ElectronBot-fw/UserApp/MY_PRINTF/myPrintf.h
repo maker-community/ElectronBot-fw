@@ -9,4 +9,5 @@
 void myPrintf(const char* format, ...);
 void myDebug(const char* format, ...);
 
+
 #endif //CPROJECT_MYPRINTF_H

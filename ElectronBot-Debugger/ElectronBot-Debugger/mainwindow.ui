@@ -96,7 +96,7 @@
    </widget>
    <widget class="QGroupBox" name="groupBox">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
@@ -110,6 +110,9 @@
      <string/>
     </property>
     <widget class="QPushButton" name="pushButton_USB_Open">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -174,10 +177,26 @@
       <string>VID：</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="pushButton_USB_Open_2">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>91</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>USB_Open</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
@@ -191,6 +210,9 @@
      <string/>
     </property>
     <widget class="QPushButton" name="Clear">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -254,7 +276,7 @@
    </widget>
    <widget class="QGroupBox" name="groupBox_3">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
@@ -373,6 +395,9 @@
      </property>
     </widget>
     <widget class="QPushButton" name="Data_Send">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>10</x>

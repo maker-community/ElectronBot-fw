@@ -2,7 +2,7 @@
 QT       += core gui
 QT       += printsupport
 QT       += network
-
+QT += axcontainer
 VERSION = 1.1.2.0
 QT += serialport
 //QT       += core gui serialport

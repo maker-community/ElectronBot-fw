@@ -290,10 +290,7 @@ void Gesture(void)
    // if(GestureTimeCount>=100) {
    //     GestureTimeCount=0;
         //timeCount=0;
-
-        //xSemaphoreTake(xMutex, portMAX_DELAY);
-         vPortEnterCritical();
-
+        xSemaphoreTake(xMutex, portMAX_DELAY);
         // HAL_Delay(3);
         HAL_Delay(1);
         //if (iic_lock== false)
@@ -303,8 +300,7 @@ void Gesture(void)
         //gesture_iic_lock = false;
         //vTaskDelay(1);
          HAL_Delay(1);
-        //xSemaphoreGive(xMutex);
-        vPortExitCritical();
+        xSemaphoreGive(xMutex);
    // }
 
     if(!status)

@@ -175,6 +175,8 @@ private slots:
 
     void on_jointIdCb_currentTextChanged(const QString &arg1);
 
+    void on_pushButton_USB_Open_2_clicked();
+
 private:
 //    void initComm();
 //    bool isOpen();

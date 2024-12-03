@@ -29,10 +29,19 @@
 #include <QDesktopServices>
 #include <QUrl>
 
+
+#include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
+#include <string>
 #include <crcLib.h>
 
 
+//win speaker
+#include <mmdeviceapi.h>
+#include <endpointvolume.h>
+#include <audioclient.h>
+//win speaker
 
 
 long            RecordBytes;
@@ -393,6 +402,61 @@ void MainWindow::on_pushButton_USB_Open_clicked()
             printf("USB Device open Fail!\r\n");
             return;  //
         }
+        else   // USB 设备打开失败
+        {
+            printf("USB Device open ok!\r\n");
+        }
+
+        ui->pushButton_USB_Open->setText("USB_Close");   // 按钮显示修改为USB_Close
+
+
+        ui->VID_Data->setDisabled(true);
+        ui->PID_Data->setDisabled(true);
+
+        USB_Read_Start =1;
+    }
+    else
+    {
+        ui->pushButton_USB_Open->setText("USB_Open");   // 按钮显示修改为USB_Close
+        ui->VID_Data->setDisabled(false);
+        ui->PID_Data->setDisabled(false);
+        USB_Read_Start =0;
+
+        if(USB_Inerface_On = 1) // 关闭操作只执行一次
+        {
+            USB_Close_Process();  // 关闭USB接口
+            USB_Inerface_On =0;
+        }
+    }
+}
+void MainWindow::on_pushButton_USB_Open_2_clicked()
+{
+    if(ui->pushButton_USB_Open->text() == "USB_Open")
+    {
+        Rx_Data_Cnt =0;
+        int ret =0;
+        bool ret_bool =0;
+
+        QString VID_Str = ui->VID_Data->text();
+        QString PID_Str = ui->PID_Data->text();
+
+        MY_VID = VID_Str.toUShort(&ret_bool,10);
+        MY_PID = PID_Str.toUShort(&ret_bool,10);
+
+        USB_Inerface_On =1;
+
+        ret = USB_Init_Open_Process();    // 打开USB
+        // 打开一个文件
+        if(ret == 0)   // USB 设备打开失败
+        {
+            printf("USB Device open Fail!\r\n");
+            //myprintf("USB Device open Fail!\r\n");
+            return;  //
+        }
+        else   // USB 设备打开成功
+        {
+            printf("USB Device open ok!\r\n");
+        }
 
         ui->pushButton_USB_Open->setText("USB_Close");   // 按钮显示修改为USB_Close
 
@@ -577,6 +641,86 @@ void MainWindow::DealSerialPortData()
 
     QString buf = QString(receivedData);
     ui->serialPortLogEdit->appendPlainText(buf);
+
+    QString str ="electron.joint[6].angle=";
+     QString strAngle;
+     QString *str3;
+     int angle=0;
+     char angleBuf[]="electron.joint[6].angle=";
+     std::string cstr = buf.toStdString();
+     const char* c_str = cstr.c_str();
+     for(int i=0;i<buf.length();i++)
+     {
+         //if(strcmp(angleBuf,&c_str[i])==0)
+         if(memcmp(angleBuf,&c_str[i],strlen(angleBuf))==0)
+         {
+            //angle=std::stoi(c_str[i+sizeof(angleBuf)]);
+            angle=atoi(&c_str[i+strlen(angleBuf)]);
+            // angle=atoi(angleBuf);
+            //angle=(c_str[i+sizeof(angleBuf)]);
+            //strAngle.number(angle);
+            strAngle.sprintf("win speaker voice =%d",angle);
+            ui->serialPortLogEdit->appendPlainText(strAngle);
+            buf.clear();
+
+
+
+            HRESULT hr;
+               IMMDeviceEnumerator* pDeviceEnumerator=nullptr;
+               IMMDevice* pDevice=nullptr;
+               IAudioEndpointVolume* pAudioEndpointVolume=nullptr;
+               IAudioClient* pAudioClient=nullptr;
+                int level = 0;
+                level = angle;
+               try{
+                   hr = CoCreateInstance(__uuidof(MMDeviceEnumerator),nullptr,CLSCTX_ALL,__uuidof(IMMDeviceEnumerator),(void**)&pDeviceEnumerator);
+                   if(FAILED(hr)) throw "CoCreateInstance";
+                   hr = pDeviceEnumerator->GetDefaultAudioEndpoint(eRender,eMultimedia,&pDevice);
+                   if(FAILED(hr)) throw "GetDefaultAudioEndpoint";
+                   hr = pDevice->Activate(__uuidof(IAudioEndpointVolume),CLSCTX_ALL,nullptr,(void**)&pAudioEndpointVolume);
+                   if(FAILED(hr)) throw "pDevice->Active";
+                   hr = pDevice->Activate(__uuidof(IAudioClient),CLSCTX_ALL,nullptr,(void**)&pAudioClient);
+                   if(FAILED(hr)) throw "pDevice->Active";
+
+                   if(level==-2){
+                       hr = pAudioEndpointVolume->SetMute(FALSE,nullptr);
+                       if(FAILED(hr)) throw "SetMute";
+                   }else if(level==-1){
+                       hr = pAudioEndpointVolume->SetMute(TRUE,nullptr);
+                       if(FAILED(hr)) throw "SetMute";
+                   }else{
+                       if(level<0 || level>100){
+                           hr = E_INVALIDARG;
+                           throw "Invalid Arg";
+                       }
+
+                       float fVolume;
+                       fVolume = level/100.0f;
+                       hr = pAudioEndpointVolume->SetMasterVolumeLevelScalar(fVolume,&GUID_NULL);
+
+
+                       if(FAILED(hr)) throw "SetMasterVolumeLevelScalar";
+
+                       pAudioClient->Release();
+                       pAudioEndpointVolume->Release();
+                       pDevice->Release();
+                       pDeviceEnumerator->Release();
+                     //  return true;
+                   }
+               }
+               catch(...){
+                   if(pAudioClient) pAudioClient->Release();
+                   if(pAudioEndpointVolume) pAudioEndpointVolume->Release();
+                   if(pDevice) pDevice->Release();
+                   if(pDeviceEnumerator) pDeviceEnumerator->Release();
+                   throw;
+               }
+            //   return false;
+
+         }
+     }
+
+     int pos=buf.indexOf(str);
 
     //buf.sprintf("serialPortframeDataLen=%d",serialPortframeDataLen);
     //ui->serialPortLogEdit->appendPlainText(buf);
@@ -2895,4 +3039,5 @@ void MainWindow::fileInit(void)
     copyDir(source,destination,true);
 
 }
+
 

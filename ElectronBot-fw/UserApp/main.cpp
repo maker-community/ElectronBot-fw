@@ -14,7 +14,7 @@
 #include "queue.h"
 #include "portmacro.h"
 #include "semphr.h"
-#include "stdio.h"
+
 
 Robot electron(&hspi1, &hi2c1);
 float jointSetPoints[6];
@@ -82,14 +82,11 @@ void MPU_6050_read(void)
     if(MPU_6050_read_time_count>=300) {
         MPU_6050_read_time_count=0;
         //printf("100ms");
-        //HAL_Delay(10);
-        HAL_Delay(1);
+        HAL_Delay(10);
         if (mpu_dmp_get_data(&pitch, &roll, &yaw) == 0) {
-            vPortEnterCritical();
             temp = MPU_Get_Temperature();    //得到温度值
             MPU_Get_Accelerometer(&aacx, &aacy, &aacz);    //得到加速度传感器数据
             MPU_Get_Gyroscope(&gyrox, &gyroy, &gyroz);    //得到陀螺仪数据
-            vPortExitCritical();
             if (1)//GetData=0时 用于USMART调试MPU6050寄存器
             {
 
@@ -150,8 +147,34 @@ extern bool iic_lock;
  {
      if(recv_end_flag ==1)//接收完成标志
      {
+       //  printf("\r\n");
+       //  HAL_Delay(5);
+         //printf("数据长度=%d\r\n",Rx_len);//打印接收到的数据长度
+         //printf("数据内容:");
+
+     //      printf("dataLen=%d\r\n",Rx_len);//打印接收到的数据长度
+     //       HAL_Delay(20);
+     //      printf("data:");
+     //       HAL_Delay(20);
+     //       for(int i=0;i<Rx_len;i++)
+     //      {
+     //          printf("%x ",ReceiveBuff[i]);//向串口打印接收到的数据
+     //          HAL_Delay(5);
+     //      }
+
+           //printf("data:");
+           // HAL_Delay(20);
+           //for(int i=0;i<Rx_len;i++)
+          // {
+          //     printf("%c",ReceiveBuff[i]);//向串口打印接收到的数据
+          //     HAL_Delay(5);
+          // }
+
+      //   HAL_Delay(20);
+         //WriteFlashu8tou32(APPLICATION_ADDRESS,ReceiveBuff,Rx_len);
          ProtocolProcessing(ReceiveBuff,Rx_len);
-         memset(ReceiveBuff,0,Rx_len);
+       //  printf("\r\n");
+       //  HAL_Delay(5);
          for(int i = 0; i < Rx_len ; i++) //清空接收缓存区
              ReceiveBuff[i]=0;//置0
          Rx_len=0;//接收数据长度清零
@@ -179,7 +202,7 @@ void CheckJointsConnectionStatus()
  }
 
  extern struct RotationTest_t RotationTest;
- bool iicFailPrintfEn= true;
+ bool iicFailPrintfEn= false;
 void rotationTest(void)
 {
     char VERSION[]={"1.0.1.0"};//{"1.0.0.0"}
@@ -262,85 +285,91 @@ uint8_t GestureMainResumeEn=0;
  extern  osThreadId_t gestureTaskHandle;
  uint8_t JointChangeEn=0;
  extern SemaphoreHandle_t xMutex;
- uint16_t GestureMainCount=0;
-// void GestureMain(void)
-// {
-//     //while(1);
-//    // HAL_UART_Receive_DMA(&huart1,(uint8_t*)ReceiveBuff,BUFFERSIZE);
-//    // __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
-//
-//     //MX_DMA_Init();
-//    // MX_USART1_UART_Init();
-//  //   HAL_UART_Receive_DMA(&huart1,(uint8_t*)ReceiveBuff,BUFFERSIZE);
-// //    __HAL_UART_CLEAR_IDLEFLAG(&huart1);
-// //    __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);normalModeTestnormalModeTest
-//
-//    // while(1);
-//     //while(1)uart1_data();
-//    // GestureInit();
-//   //  MPU_6050_init();
-//     while(1){
-//        // CheckJointsConnectionStatus();
-//
-//                 Gesture();
-//        MPU_6050_read();
-////        // StatusReporting();
-//         uart1_data();
-//
-//       //  GestureMainCount++;
-//      //   myPrintf("%d",GestureMainCount);
-//         //Gesture();
-//
-//         /*if(JointChangeEn) {
-//             xSemaphoreTake(xMutex, portMAX_DELAY);
-//             JointChangeEn = 0;
-//             xSemaphoreGive(xMutex);
-//             uint8_t *ptr = electron.GetExtraDataRxPtr();
-//             //vTaskDelay(1);
-//             HAL_Delay(1);
-//             if (isEnabled != (bool) ptr[0]) {
-//                 isEnabled = ptr[0];
-//                 electron.SetJointEnable(electron.joint[1], isEnabled);
-//                 electron.SetJointEnable(electron.joint[2], isEnabled);
-//                 electron.SetJointEnable(electron.joint[3], isEnabled);
-//                 electron.SetJointEnable(electron.joint[4], isEnabled);
-//                 electron.SetJointEnable(electron.joint[5], isEnabled);
-//                 electron.SetJointEnable(electron.joint[6], isEnabled);
-//             }
-//             for (int j = 0; j < 6; j++) {
-//                 jointSetPoints[j] = *((float *) (ptr + 4 * j + 1));
-//             }
-//             //vTaskDelay(1);
-//             HAL_Delay(1);
-//             electron.UpdateJointAngle(electron.joint[1], jointSetPoints[0]);
-//             electron.UpdateJointAngle(electron.joint[2], jointSetPoints[1]);
-//             electron.UpdateJointAngle(electron.joint[3], jointSetPoints[2]);
-//             electron.UpdateJointAngle(electron.joint[4], jointSetPoints[3]);
-//             electron.UpdateJointAngle(electron.joint[5], jointSetPoints[4]);
-//             electron.UpdateJointAngle(electron.joint[6], jointSetPoints[5]);
-//            // vTaskDelay(1);
-//             HAL_Delay(1);
-//         }
-//        // Gesture();
-//
-//         GestureMainResumeEn= 1;*/
-//        // vTaskSuspend(NULL);
-//       //  vTaskResume((TaskHandle_t)defaultTaskHandle);
-//       //  vTaskSuspend ((TaskHandle_t)defaultTaskHandle);
-//         vTaskSuspend ((TaskHandle_t)gestureTaskHandle);
-//     }
-//     MPU_6050_init();
-//     while(1)MPU_6050_read();
-//
-//     while(1)HAL_Delay(50);
-// }
 
+ uint32_t g_msCounter=0;
+ uint32_t g_InitOK=0;
+ void GestureMain(void)
+ {
+     //while(1);
+    // HAL_UART_Receive_DMA(&huart1,(uint8_t*)ReceiveBuff,BUFFERSIZE);
+    // __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
+
+     //MX_DMA_Init();
+    // MX_USART1_UART_Init();
+  //   HAL_UART_Receive_DMA(&huart1,(uint8_t*)ReceiveBuff,BUFFERSIZE);
+ //    __HAL_UART_CLEAR_IDLEFLAG(&huart1);
+ //    __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);normalModeTestnormalModeTest
+
+    // while(1);
+     //while(1)uart1_data();
+    // GestureInit();
+   //  MPU_6050_init();
+     while(1){
+        // CheckJointsConnectionStatus();
+       //  Gesture();
+      //   MPU_6050_read();
+        // StatusReporting();
+         uart1_data();
+         //Gesture();
+
+         /*if(JointChangeEn) {
+             xSemaphoreTake(xMutex, portMAX_DELAY);
+             JointChangeEn = 0;
+             xSemaphoreGive(xMutex);
+             uint8_t *ptr = electron.GetExtraDataRxPtr();
+             //vTaskDelay(1);
+             HAL_Delay(1);
+             if (isEnabled != (bool) ptr[0]) {
+                 isEnabled = ptr[0];
+                 electron.SetJointEnable(electron.joint[1], isEnabled);
+                 electron.SetJointEnable(electron.joint[2], isEnabled);
+                 electron.SetJointEnable(electron.joint[3], isEnabled);
+                 electron.SetJointEnable(electron.joint[4], isEnabled);
+                 electron.SetJointEnable(electron.joint[5], isEnabled);
+                 electron.SetJointEnable(electron.joint[6], isEnabled);
+             }
+             for (int j = 0; j < 6; j++) {
+                 jointSetPoints[j] = *((float *) (ptr + 4 * j + 1));
+             }
+             //vTaskDelay(1);
+             HAL_Delay(1);
+             electron.UpdateJointAngle(electron.joint[1], jointSetPoints[0]);
+             electron.UpdateJointAngle(electron.joint[2], jointSetPoints[1]);
+             electron.UpdateJointAngle(electron.joint[3], jointSetPoints[2]);
+             electron.UpdateJointAngle(electron.joint[4], jointSetPoints[3]);
+             electron.UpdateJointAngle(electron.joint[5], jointSetPoints[4]);
+             electron.UpdateJointAngle(electron.joint[6], jointSetPoints[5]);
+            // vTaskDelay(1);
+             HAL_Delay(1);
+         }
+        // Gesture();
+
+         GestureMainResumeEn= 1;*/
+        // vTaskSuspend(NULL);
+       //  vTaskResume((TaskHandle_t)defaultTaskHandle);
+       //  vTaskSuspend ((TaskHandle_t)defaultTaskHandle);
+
+
+     //    HAL_Delay(1);
+         if(g_msCounter>=1000 && g_InitOK>=1)
+         {
+             g_msCounter=0;
+             electron.UpdateJointAngle(electron.joint[6], jointSetPoints[5]);
+             myPrintf("electron.joint[6].angle=%d",(int)electron.joint[6].angle);
+         }
+        // vTaskSuspend ((TaskHandle_t)gestureTaskHandle);
+     }
+     MPU_6050_init();
+     while(1)MPU_6050_read();
+
+     while(1)HAL_Delay(50);
+ }
 
  //char VERSION[]={"1.0.0.0"};
 
 void normalMode(void )
 {
-    char VERSION[]={"1.0.4.0"};//{"1.0.0.0"}
+    char VERSION[]={"1.0.1.1"};//{"1.0.0.0"}
     myPrintf("------------------------------------ \r\n");
 
     myPrintf("ElectronBot-fw (normal mode)\r\n");
@@ -356,6 +385,7 @@ void normalMode(void )
     // electron.SetJointKp(electron.joint[2], 40);
     // electron.SetJointTorqueLimit(electron.joint[2], 1.0);
     // while(1);
+    g_InitOK=1;
     while (true)
     {
 #if 1
@@ -417,6 +447,10 @@ void normalMode(void )
         electron.UpdateJointAngle(electron.joint[6], jointSetPoints[5]);
 
         HAL_Delay(1);
+        if(g_msCounter>=1000)
+        {
+            myPrintf("electron.joint[6].angle=%d",electron.joint[6].angle);
+        }
         //Gesture();
 //      electron.UpdateJointAngle(electron.joint[ANY], 65 + 75 * std::sin(t));
 
@@ -481,7 +515,6 @@ void normalMode(void )
              HAL_Delay(20);
          }
      }
-
      electron.SetJointEnable(electron.joint[0], false);
 
 
@@ -554,228 +587,24 @@ void normalMode(void )
          //        jointSetPoints[3], jointSetPoints[4], jointSetPoints[5]);
      }
  }
-
-
-//extern const osThreadAttr_t gestureTask_attributes;
-//extern const osThreadAttr_t gyroscopeTask_attributes;
-//extern const osThreadAttr_t uartTask_attributes;
-
-// extern osThreadId_t gestureTaskHandle;
-//extern osThreadId_t gyroscopeTaskHandle;
-//extern osThreadId_t uartTaskHandle;
-
- osThreadId_t gestureTaskHandle;
- const osThreadAttr_t gestureTask_attributes = {
-         .name = "gestureTask",
-         //.stack_size = 128 * 4,
-         .stack_size = 128 * 8*4,
-         //.stack_size = 128 *4,
-         .priority = (osPriority_t) osPriorityNormal,
-         //.priority = (osPriority_t) osPriorityBelowNormal7,
- };
-
- osThreadId_t gyroscopeTaskHandle;
- const osThreadAttr_t gyroscopeTask_attributes = {
-         .name = "gyroscopeTask",
-         //.stack_size = 128 * 4,
-         .stack_size = 128 * 8*4,
-         .priority = (osPriority_t) osPriorityNormal,
-         //.priority = (osPriority_t) osPriorityBelowNormal7,
- };
-
- osThreadId_t uartTaskHandle;
- const osThreadAttr_t uartTask_attributes = {
-         .name = "uartTask",
-         //.stack_size = 128 * 4,
-         .stack_size = 128 * 8*4,
-         //.stack_size = 128 * 4,
-         .priority = (osPriority_t) osPriorityNormal,
-         //.priority = (osPriority_t) osPriorityBelowNormal7,
- };
-
-
-extern void GesturetTask(void *argument);
-extern void GyroscopeTask(void *argument);
-extern void UartTask(void *argument);
-
-
- void UartMain(void )
- {
-     while(1)
-     {
-         uart1_data();
-         vTaskSuspend((TaskHandle_t) uartTaskHandle);
-     }
- }
-
- void GyroscopeMain(void )
- {
-     while(1)
-     {
-         MPU_6050_read();
-         vTaskSuspend((TaskHandle_t) gyroscopeTaskHandle);
-     }
- }
-
- void GestureMain(void)
- {
-     while (1)
-     {
-       //  Gesture();
-       //  vTaskSuspend((TaskHandle_t) gestureTaskHandle);
-     }
- }
-
- void GesturetTask(void *argument) {
-     GestureMain();
-     vTaskDelete((TaskHandle_t)gestureTaskHandle);
- }
-
- void GyroscopeTask(void *argument) {
-     GyroscopeMain();
-     vTaskDelete((TaskHandle_t)gyroscopeTaskHandle);
- }
-
- void UartTask(void *argument) {
-     UartMain();
-     vTaskDelete((TaskHandle_t)uartTaskHandle);
- }
- void All_IIC_Test(void)
- {
-     float angle = 0;
-     GestureInit();
-     MPU_6050_init();
-
-     gestureTaskHandle = osThreadNew(GesturetTask, NULL, &gestureTask_attributes);
-    // gyroscopeTaskHandle = osThreadNew(GyroscopeTask, NULL, &gyroscopeTask_attributes);
-     uartTaskHandle = osThreadNew(UartTask, NULL, &uartTask_attributes);
-     vTaskSuspend((TaskHandle_t) gestureTaskHandle);
-     vTaskSuspend((TaskHandle_t) uartTaskHandle);
-     GestureMainResumeEn=1;
-     while(1)
-     {
-         electron.UpdateJointAngle(electron.joint[0], angle);
-     }
- }
-
- uint8_t logBuf[100]={0};
-//#define PrintfLog(...) sprintf((char*) logBuf,__VA_ARGS__)
-#define PrintfLog(...) sprintf((char*) logBuf,##__VA_ARGS__)
-//#define DBG(format, ...) printf(format, ##__VA_ARGS__)
-//void myPRintf(const char* format, ...)
-//{
-//    printf(format);
-//}
-
  void Main(void)
  {
      HAL_UART_Receive_DMA(&huart1,(uint8_t*)ReceiveBuff,BUFFERSIZE);
      __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
 
+     //while(1)uart1_data();
+     //while(1);
+
+
+   // while(1)
+   // {
+  //      myPrintf("OTA bin test 0.7!!!!\r\n");
+  //      HAL_Delay(500);
+  //  }
+
      HAL_Delay(500);
      electron.lcd->Init(Screen::DEGREE_0);
      electron.lcd->SetWindow(0, 239, 0, 239);
-
-     PrintfLog("PrintfLogTest");
-
-  //   rotationTest();
-
-   //  GestureInit();
-  //   MPU_6050_init();
-    // GestureMainResumeEn=1;
-
-    while(1)All_IIC_Test();
-
-    // while(1)normalMode();
-     //  while(1)normalModeTest();
-     while(1)normalMode();
-     // while(1)rotationTest();
-     // while(1)paj7620Test();
-     // while(1)mpu6050Test();
-     while(1)rotationTest();
-
-
-     electron.joint[0].id = 0;
-     electron.joint[0].angleMin = 0;
-     electron.joint[0].angleMax = 180;
-     electron.joint[0].angle = 0;
-     electron.joint[0].modelAngelMin = -90;
-     electron.joint[0].modelAngelMax = 90;
-
-     // 2.使用广播地址是能
-     electron.SetJointEnable(electron.joint[0], true);
-     HAL_Delay(10);
-     electron.SetJointKp(electron.joint[0],40);
-     HAL_Delay(10);
-     electron.SetJointTorqueLimit(electron.joint[0],0.7);
-     HAL_Delay(10);
-     GestureMainResumeEn=1;
-     //while(1);
-     while(1) {
-         // CheckJointsConnectionStatus();
-        //   Gesture();
-        //   MPU_6050_read();
-         // 3.这时候就能看到舵机做往复运动了。
-         while (1)
-         {
-             for (int i = -90; i < 90; i += 1)
-             {
-                 float angle = i;
-                 electron.UpdateJointAngle(electron.joint[0], angle);
-                 HAL_Delay(20);
-             }
-             for (int i = 90; i > -90; i -= 1)
-             {
-                 float angle = i;
-                 electron.UpdateJointAngle(electron.joint[0], angle);
-                 HAL_Delay(20);
-             }
-         }
-//         GestureMainCount++;
-//         myPrintf("%d",GestureMainCount);
-         // StatusReporting();
-     }
-
-//     while(1)
-//     {
-//         int i=0;
-//         for(i=-500;i<500;i+=10)
-//         {
-//             //printf("")
-//             printf("$%d %d;",i,i);
-//             HAL_Delay(10);
-//         }
-//     }
-
-              while(1)
-    {
-        electron.JointFamerWareVersionRead(electron.joint[6],12);
-        electron.JointIdRead(electron.joint[6],12);
-//        electron.JointADCValueRead(electron.joint[6],12);
-//        HAL_Delay(500);
-        electron.JointPWMChnel1Test(electron.joint[6],12);
-        printf("JointPWMChnel1Test");
-        HAL_Delay(5000);
-        electron.JointPWMChnelTestClose(electron.joint[6],12);
-        printf("JointPWMChnelTestClose");
-        HAL_Delay(2000);
-        electron.JointPWMChnel2Test(electron.joint[6],12);
-        printf("JointPWMChnel2Test");
-        HAL_Delay(5000);
-//        electron.JointPWMChnelTestClose(electron.joint[6],12);
-//        printf("JointPWMChnelTestClose");
-//        HAL_Delay(500);
-//        electron.JointPWMChnel1Test(electron.joint[6],12);
-//        electron.JointPWMChnel2Test(electron.joint[6],12);
-//        printf("JointPWMChnel1_2Test");
-//        electron.JointPWMChnelTestClose(electron.joint[6],12);
-//        printf("JointPWMChnelTestClose");
-//        HAL_Delay(500);
-
-//          electron.JointSystemReset(electron.joint[6],12);
-//          printf("JointSystemReset");
-//          HAL_Delay(4000);
-    }
 
    //  while(1)normalModeTest();
      while(1)normalMode();

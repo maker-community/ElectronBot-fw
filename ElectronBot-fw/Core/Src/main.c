@@ -168,11 +168,12 @@ int main(void)
   MX_I2C1_Init();
 
   //MX_GPIO_Init1();
-  MX_TIM2_Init();
+  //MX_TIM2_Init();
 
-  HAL_NVIC_SetPriority(TIM2_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(TIM2_IRQn);
-  HAL_TIM_Base_Start_IT(&htim2);
+  //HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);
+  //HAL_NVIC_EnableIRQ(TIM2_IRQn);
+
+ // HAL_TIM_Base_Start_IT(&htim2);
 
  // while(1);
 

@@ -63,32 +63,14 @@ const osThreadAttr_t defaultTask_attributes = {
         //osPriorityAboveNormalosPriorityAboveNormal.priority = (osPriority_t) osPriorityAboveNormal,
 };
 
-//osThreadId_t gestureTaskHandle;
-//const osThreadAttr_t gestureTask_attributes = {
-//        .name = "gestureTask",
-//        //.stack_size = 128 * 4,
-//        .stack_size = 128 * 8*4,
-//        .priority = (osPriority_t) osPriorityNormal,
-//        //.priority = (osPriority_t) osPriorityBelowNormal7,
-//};
-//
-//osThreadId_t gyroscopeTaskHandle;
-//const osThreadAttr_t gyroscopeTask_attributes = {
-//        .name = "gyroscopeTask",
-//        //.stack_size = 128 * 4,
-//        .stack_size = 128 * 8*4,
-//        .priority = (osPriority_t) osPriorityNormal,
-//        //.priority = (osPriority_t) osPriorityBelowNormal7,
-//};
-//
-//osThreadId_t uartTaskHandle;
-//const osThreadAttr_t uartTask_attributes = {
-//        .name = "uartTask",
-//        //.stack_size = 128 * 4,
-//        .stack_size = 128 * 8*4,
-//        .priority = (osPriority_t) osPriorityNormal,
-//        //.priority = (osPriority_t) osPriorityBelowNormal7,
-//};
+osThreadId_t gestureTaskHandle;
+const osThreadAttr_t gestureTask_attributes = {
+        .name = "gestureTask",
+        //.stack_size = 128 * 4,
+        .stack_size = 128 * 8*4,
+        .priority = (osPriority_t) osPriorityNormal,
+        //.priority = (osPriority_t) osPriorityBelowNormal7,
+};
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
 
@@ -96,8 +78,6 @@ const osThreadAttr_t defaultTask_attributes = {
 
 void StartDefaultTask(void *argument);
 void GesturetTask(void *argument);
-void GyroscopeTask(void *argument);
-void UartTask(void *argument);
 
 extern void MX_USB_DEVICE_Init(void);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
@@ -139,10 +119,7 @@ void MX_FREERTOS_Init(void) {
   /* Create the thread(s) */
   /* creation of defaultTask */
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
-//  gestureTaskHandle = osThreadNew(GesturetTask, NULL, &gestureTask_attributes);
-//  gyroscopeTaskHandle = osThreadNew(GyroscopeTask, NULL, &gyroscopeTask_attributes);
-//  uartTaskHandle = osThreadNew(UartTask, NULL, &uartTask_attributes);
-
+  gestureTaskHandle = osThreadNew(GesturetTask, NULL, &gestureTask_attributes);
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -172,17 +149,25 @@ void StartDefaultTask(void *argument)
   /* USER CODE END StartDefaultTask */
 }
 
-//void GesturetTask(void *argument) {
-//    GestureMain();
-//    vTaskDelete(gestureTaskHandle);
-//}
-//
-//void GyroscopeTask(void *argument) {
-//    GyroscopeMain();
-//    vTaskDelete(gestureTaskHandle);
-//}
-//
-//void UartTask(void *argument) {
-//    UartMain();
-//    vTaskDelete(uartTaskHandle);
-//}
+
+void GesturetTask(void *argument) {
+    /* init code for USB_DEVICE */
+    //MX_USB_DEVICE_Init();
+    /* USER CODE BEGIN StartDefaultTask */
+
+    // Invoke cpp-version main().
+   // Main();
+    GestureMain();
+    // GestureInit();
+    // while(1)Gesture();
+    // vTaskDelete(gestureTaskHandle);
+    vTaskDelete(gestureTaskHandle);
+    /* USER CODE END Sta
+
+  /* Private application code --------------------------------------------------*/
+/* USER CODE BEGIN Application */
+
+/* USER CODE END Application */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+}

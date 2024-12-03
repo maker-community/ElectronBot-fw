@@ -11,8 +11,6 @@ extern "C" {
 /*--------------------------------- System Tasks -------------------------------------*/
 extern osThreadId_t defaultTaskHandle;      // Usage: 800 Bytes stack
 extern osThreadId_t gestureTaskHandle;
-extern osThreadId_t gyroscopeTaskHandle;
-extern osThreadId_t uartTaskHandle;
 /*---------------------------------- User Tasks --------------------------------------*/
 
 /*---------------- xxxK (used) / xxxK (for FreeRTOS) / xxxK (total) ------------------*/
